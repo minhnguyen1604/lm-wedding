@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Thiệp cưới</title>
+  <meta name="description" content="Trân trọng kính mời bạn đến chung vui cùng chúng mình.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f6f1e6">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Thiệp cưới">
+  <meta property="og:description" content="Trân trọng kính mời bạn đến chung vui cùng chúng mình.">
+  <meta property="og:image" content="images/nen.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Nền hoa mờ, đứng yên phía sau khi cuộn -->
+  <div class="nen" aria-hidden="true"></div>
+
+  <main class="trang">
+
+    <header class="mo-dau">
+      <p class="chu-nho" id="loi-mo-dau"></p>
+      <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+        <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+        <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+        <circle cx="50" cy="6" r="1" fill="currentColor"/>
+        <circle cx="70" cy="6" r="1" fill="currentColor"/>
+      </svg>
+    </header>
+
+    <!-- 1. Các khung thiệp -->
+    <section class="phan" id="thiep" aria-label="Thông tin đám cưới">
+      <div class="ds-khung" id="ds-khung"></div>
+    </section>
+
+    <!-- 2. Địa điểm -->
+    <section class="phan" id="dia-diem">
+      <div class="tieu-de cuon">
+        <p class="chu-nho">Hẹn gặp bạn tại</p>
+        <h2>Địa điểm</h2>
+        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          <circle cx="50" cy="6" r="1" fill="currentColor"/>
+          <circle cx="70" cy="6" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="the cuon">
+        <p class="dd-ten" id="dd-ten"></p>
+        <p class="dd-dia-chi" id="dd-dia-chi"></p>
+        <div class="ban-do">
+          <iframe id="dd-map" title="Bản đồ nơi tổ chức" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+        <a class="nut" id="dd-chi-duong" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 12 3.5 6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          Chỉ đường
+        </a>
+      </div>
+    </section>
+
+    <!-- 3. Album ảnh cưới -->
+    <section class="phan" id="album">
+      <div class="tieu-de cuon">
+        <p class="chu-nho">Khoảnh khắc của chúng mình</p>
+        <h2>Album cưới</h2>
+        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          <circle cx="50" cy="6" r="1" fill="currentColor"/>
+          <circle cx="70" cy="6" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="luoi-anh" id="luoi-anh"></div>
+    </section>
+
+    <footer class="ket cuon">
+      <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+        <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+        <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+        <circle cx="50" cy="6" r="1" fill="currentColor"/>
+        <circle cx="70" cy="6" r="1" fill="currentColor"/>
+      </svg>
+      <p id="loi-ket"></p>
+    </footer>
+  </main>
+
+  <!-- Khung xem ảnh phóng to -->
+  <div class="xem-anh" id="xem-anh" role="dialog" aria-modal="true" aria-label="Xem ảnh" hidden>
+    <button class="xa-nut xa-dong" id="xa-dong" aria-label="Đóng">&times;</button>
+    <button class="xa-nut xa-truoc" id="xa-truoc" aria-label="Ảnh trước">&lsaquo;</button>
+    <img id="xa-img" alt="">
+    <button class="xa-nut xa-sau" id="xa-sau" aria-label="Ảnh sau">&rsaquo;</button>
+    <p class="xa-dem" id="xa-dem"></p>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

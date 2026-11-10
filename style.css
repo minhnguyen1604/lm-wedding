@@ -1,0 +1,307 @@
+:root {
+  --kem: #f7f2e7;        /* nền kem */
+  --kem-ngoai: #ebe4d3;  /* phần ngoài cột thiệp khi xem trên máy tính */
+  --reu: #7b8459;        /* xanh rêu của nét vẽ */
+  --reu-dam: #4a5134;    /* chữ */
+  --reu-nhat: #b9bf9f;   /* viền */
+  --vang: #c9a24b;       /* nhuỵ hoa */
+  --do-mo-nen: .5;       /* độ rõ của nền hoa: 0 = mất hẳn, 1 = rõ nguyên bản */
+  --rong: 520px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--kem-ngoai);
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--reu-dam);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Nền hoa mờ ---------- */
+.nen {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, var(--rong));
+  height: 100vh;
+  height: 100lvh;
+  background: var(--kem);
+  box-shadow: 0 0 60px rgba(74, 81, 52, .16);
+  z-index: -1;
+}
+.nen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("images/nen.jpg") center / cover no-repeat;
+  opacity: var(--do-mo-nen);
+}
+
+/* ---------- Khung trang ---------- */
+.trang {
+  width: min(100%, var(--rong));
+  margin: 0 auto;
+  padding: 0 20px calc(40px + env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+
+.chu-nho {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--reu);
+}
+
+.hoa-van {
+  display: block;
+  width: 120px;
+  height: 12px;
+  margin: 14px auto 0;
+  color: var(--vang);
+}
+
+.mo-dau {
+  padding: 44px 0 26px;
+  text-align: center;
+}
+
+/* Quầng sáng kem quanh chữ nằm trực tiếp trên nền hoa, cho dễ đọc */
+.mo-dau, .tieu-de, .ket {
+  text-shadow: 0 0 6px var(--kem), 0 0 14px var(--kem), 0 0 22px var(--kem);
+}
+
+.phan { padding-bottom: 64px; }
+
+.tieu-de {
+  text-align: center;
+  margin-bottom: 26px;
+}
+.tieu-de h2 {
+  margin: 6px 0 0;
+  font-size: 44px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.15;
+  color: var(--reu-dam);
+}
+
+/* ---------- 1. Khung thiệp ---------- */
+.ds-khung {
+  display: grid;
+  gap: 28px;
+}
+
+.khung {
+  margin: 0;
+  padding: 9px;
+  background: rgba(255, 253, 248, .62);
+  border: 1px solid var(--reu-nhat);
+  box-shadow: 0 10px 30px rgba(74, 81, 52, .14);
+}
+.khung img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+}
+
+.cho-trong {
+  display: grid;
+  place-content: center;
+  gap: 6px;
+  text-align: center;
+  border: 1px dashed var(--reu-nhat);
+  color: var(--reu);
+}
+.khung .cho-trong { aspect-ratio: 2 / 3; }
+.cho-trong b {
+  font-size: 30px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--reu-dam);
+}
+.cho-trong span {
+  font-size: 15px;
+  padding: 0 24px;
+}
+
+/* ---------- 2. Địa điểm ---------- */
+.the {
+  padding: 24px 16px 22px;
+  text-align: center;
+  background: rgba(255, 253, 248, .92);
+  border: 1px solid var(--reu-nhat);
+  box-shadow: 0 10px 30px rgba(74, 81, 52, .14);
+}
+.dd-ten {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.dd-dia-chi {
+  margin: 6px 0 18px;
+  font-size: 18px;
+  color: var(--reu);
+}
+.ban-do {
+  height: 320px;
+  border: 1px solid var(--reu-nhat);
+  background: var(--kem);
+}
+.ban-do iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.nut {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 12px 30px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fffdf8;
+  background: var(--reu);
+  border: 1px solid var(--reu);
+  transition: background .2s, color .2s;
+}
+.nut:hover,
+.nut:focus-visible {
+  background: var(--reu-dam);
+  border-color: var(--reu-dam);
+}
+
+/* ---------- 3. Album ---------- */
+.luoi-anh {
+  columns: 2;
+  column-gap: 10px;
+}
+.o-anh {
+  display: block;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 5px;
+  break-inside: avoid;
+  background: rgba(255, 253, 248, .92);
+  border: 1px solid var(--reu-nhat);
+  box-shadow: 0 6px 18px rgba(74, 81, 52, .12);
+  cursor: zoom-in;
+  font: inherit;
+  color: inherit;
+}
+.o-anh img {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 80px;
+  background: var(--kem);
+}
+div.o-anh { cursor: default; }
+.o-anh .cho-trong b { font-size: 22px; }
+
+/* ---------- Cuối trang ---------- */
+.ket {
+  padding: 0 16px 20px;
+  text-align: center;
+  font-size: 22px;
+  font-style: italic;
+}
+.ket .hoa-van { margin: 0 auto 18px; }
+.ket p { margin: 0; }
+.ket p:empty { display: none; }
+
+/* ---------- Xem ảnh phóng to ---------- */
+.xem-anh {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: rgba(38, 42, 26, .94);
+  touch-action: pan-y pinch-zoom;
+}
+.xem-anh[hidden] { display: none; }
+.xem-anh img {
+  max-width: 100vw;
+  max-height: 100vh;
+  max-height: 100dvh;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.xa-nut {
+  position: absolute;
+  z-index: 1;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  padding: 0 0 4px;
+  font: 400 34px/1 "Cormorant Garamond", serif;
+  color: #fffdf8;
+  background: rgba(38, 42, 26, .5);
+  border: 1px solid rgba(255, 253, 248, .35);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.xa-dong { top: calc(14px + env(safe-area-inset-top)); right: 14px; }
+.xa-truoc { left: 10px; top: 50%; transform: translateY(-50%); }
+.xa-sau { right: 10px; top: 50%; transform: translateY(-50%); }
+.xa-dem {
+  position: absolute;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: .2em;
+  color: rgba(255, 253, 248, .8);
+}
+.mot-anh .xa-truoc,
+.mot-anh .xa-sau,
+.mot-anh .xa-dem { display: none; }
+
+body.khoa-cuon { overflow: hidden; }
+
+/* ---------- Hiệu ứng hiện dần khi cuộn ---------- */
+.js .cuon {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+.js .cuon.hien {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .cuon { opacity: 1; transform: none; transition: none; }
+}
+
+@media (max-width: 380px) {
+  .trang { padding-left: 14px; padding-right: 14px; }
+  .tieu-de h2 { font-size: 38px; }
+  .ban-do { height: 280px; }
+}

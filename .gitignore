@@ -1,4 +1,9 @@
-.claude/
+# Cấu hình riêng của Claude trên từng máy (giữ lại launch.json để chạy xem thử)
+.claude/*
+!.claude/launch.json
 __pycache__/
-# bản trùng của ảnh nền (đã có images/nen.jpg)
+
+# Bản trùng của ảnh nền (đã có images/nen.jpg) và của mã QR (đã có trong qr/)
 457be9b0-8113-4532-a0e6-3324865ec797.jpeg
+/qr-thiep-den.png
+/qr-thiep-reu.png

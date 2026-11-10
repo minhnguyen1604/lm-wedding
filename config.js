@@ -15,12 +15,12 @@ window.THIEP = {
     "images/thiep/3.jpg",
   ],
 
-  // 2) ĐỊA ĐIỂM — đang là địa điểm MẪU, sẽ thay bằng nơi tổ chức thật
+  // 2) ĐỊA ĐIỂM
   diaDiem: {
-    ten: "Tên nhà hàng / nơi tổ chức",
-    diaChi: "Địa chỉ sẽ được cập nhật",
+    ten: "Khách sạn Meliá Hà Nội",
+    diaChi: "44B Lý Thường Kiệt, Hà Nội",
     // Từ khoá để ghim trên Google Maps (tên + địa chỉ), hoặc toạ độ "21.0288,105.8525"
-    ghimBanDo: "Hồ Hoàn Kiếm, Hà Nội",
+    ghimBanDo: "Khách sạn Meliá Hanoi, 44B Lý Thường Kiệt, Hà Nội",
   },
 
   // 3) ALBUM ẢNH CƯỚI

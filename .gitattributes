@@ -1,0 +1,5 @@
+# Không cho git đổi kiểu xuống dòng trong các file này (đổi là hỏng file)
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary

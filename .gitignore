@@ -3,7 +3,10 @@
 !.claude/launch.json
 __pycache__/
 
-# Bản trùng của ảnh nền (đã có images/nen.jpg) và của mã QR (đã có trong qr/)
-457be9b0-8113-4532-a0e6-3324865ec797.jpeg
+# Ảnh gốc thả ở thư mục ngoài cùng (bản duyệt in, logo gốc, ảnh nền gốc) không đưa lên;
+# ảnh dùng cho trang nằm trong images/
+/*.jpg
+/*.jpeg
+# Bản trùng của mã QR (đã có trong qr/)
 /qr-thiep-den.png
 /qr-thiep-reu.png

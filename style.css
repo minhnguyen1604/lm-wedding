@@ -73,9 +73,18 @@ body {
 }
 
 .mo-dau {
-  padding: 44px 0 26px;
+  padding: 40px 0 28px;
   text-align: center;
 }
+.logo {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: 0 auto 4px;
+  /* quầng sáng kem để logo nổi trên nền hoa */
+  filter: drop-shadow(0 0 10px var(--kem)) drop-shadow(0 0 4px var(--kem));
+}
+.logo[hidden] { display: none; }
 
 /* Quầng sáng kem quanh chữ nằm trực tiếp trên nền hoa, cho dễ đọc */
 .mo-dau, .tieu-de, .ket {

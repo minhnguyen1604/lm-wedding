@@ -14,7 +14,8 @@ Thiệp cưới online, chạy trên GitHub Pages:
 | `config.js` | **Toàn bộ nội dung thiệp**: khung thiệp, địa điểm, album, lời chào. Sửa nội dung chỉ cần sửa file này. |
 | `index.html`, `style.css`, `script.js` | Khung trang, giao diện, hiệu ứng. Độ mờ nền chỉnh ở biến `--do-mo-nen` trong `style.css`. |
 | `images/nen.jpg` | Ảnh nền hoa |
-| `images/thiep/` | Ảnh thiết kế thiệp (`1.jpg`, `2.jpg`, `3.jpg`) — chưa có thì trang hiện khung trống |
+| `images/logo-lm.png` | Logo LM ở đầu trang (nền trong suốt) |
+| `images/thiep/` | Ảnh thiết kế thiệp: `1.jpg` lời mời, `2.jpg` timeline (cắt từ bản duyệt in) |
 | `images/gallery/` | Ảnh cưới cho album (liệt kê tên file trong `config.js`) |
 | `qr/` | Mã QR (PNG, SVG) và script tạo mã `tao_qr.py` |
 | `QR-thiep-cuoi-*.pdf` | Mã QR bản PDF vector để gửi nhà in |

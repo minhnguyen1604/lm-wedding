@@ -5,8 +5,11 @@
   var $ = function (id) { return document.getElementById(id); };
   document.documentElement.classList.add("js");
 
-  /* ---------- Chữ đầu / cuối trang ---------- */
-  $("loi-mo-dau").textContent = C.loiMoDau || "";
+  /* ---------- Logo đầu trang / chữ cuối trang ---------- */
+  if (C.logo) {
+    $("logo").src = C.logo;
+    $("logo").hidden = false;
+  }
   $("loi-ket").textContent = C.loiKet || "";
 
   /* ---------- Hiện dần khi cuộn ---------- */

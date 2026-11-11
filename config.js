@@ -3,16 +3,15 @@
    ============================================================ */
 window.THIEP = {
 
-  // Dòng chữ nhỏ ở đầu trang (để "" nếu không muốn hiện)
-  loiMoDau: "Trân trọng kính mời",
+  // Logo ở đầu trang (để "" nếu không muốn hiện)
+  logo: "images/logo-lm.png",
 
   // 1) CÁC KHUNG THIỆP (ảnh thiết kế thông tin đám cưới)
   //    Chép ảnh vào thư mục images/thiep/ rồi ghi tên file ở đây.
   //    Ảnh nào chưa có thì trang tự hiện khung trống.
   thiep: [
-    "images/thiep/1.jpg",
-    "images/thiep/2.jpg",
-    "images/thiep/3.jpg",
+    "images/thiep/1.jpg",   // lời mời (mặt sau thiệp giấy)
+    "images/thiep/2.jpg",   // timeline (mặt trước thiệp giấy)
   ],
 
   // 2) ĐỊA ĐIỂM

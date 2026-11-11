@@ -59,6 +59,7 @@
     img.alt = "Thiệp cưới – trang " + (i + 1);
     img.onload = function () {
       khung.replaceChild(img, trong);
+      $("goi-y").hidden = false;
       img.addEventListener("click", function () {
         var ds = Array.prototype.map.call(dsKhung.querySelectorAll("img"), function (x) { return x.src; });
         moAnh(ds, ds.indexOf(img.src));
@@ -70,7 +71,9 @@
   /* ---------- 2. Địa điểm ---------- */
   var dd = C.diaDiem || {};
   var ghim = dd.ghimBanDo || [dd.ten, dd.diaChi].filter(Boolean).join(", ");
+  $("dd-thoi-gian").textContent = dd.thoiGian || "";
   $("dd-ten").textContent = dd.ten || "";
+  $("dd-sanh").textContent = dd.sanh || "";
   $("dd-dia-chi").textContent = dd.diaChi || "";
   if (ghim) {
     var q = encodeURIComponent(ghim);
@@ -83,15 +86,8 @@
   var album = C.gallery || [];
 
   if (!album.length) {
-    ["3 / 4", "1 / 1", "4 / 3", "3 / 4", "3 / 4", "1 / 1"].forEach(function (tiLe, i) {
-      var o = document.createElement("div");
-      o.className = "o-anh";
-      var trong = choTrong("Ảnh " + (i + 1));
-      trong.style.aspectRatio = tiLe;
-      o.appendChild(trong);
-      luoi.appendChild(o);
-      theoDoi(o);
-    });
+    // Chưa có ảnh cưới thì ẩn hẳn mục album
+    $("album").hidden = true;
   } else {
     album.forEach(function (src, i) {
       var o = document.createElement("button");

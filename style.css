@@ -5,6 +5,7 @@
   --reu-dam: #4a5134;    /* chữ */
   --reu-nhat: #b9bf9f;   /* viền */
   --vang: #c9a24b;       /* nhuỵ hoa */
+  --vang-dam: #9a7a2e;   /* vàng đậm cho chữ nhỏ */
   --do-mo-nen: .5;       /* độ rõ của nền hoa: 0 = mất hẳn, 1 = rõ nguyên bản */
   --rong: 520px;
 }
@@ -154,17 +155,39 @@ body {
   border: 1px solid var(--reu-nhat);
   box-shadow: 0 10px 30px rgba(74, 81, 52, .14);
 }
+.dd-thoi-gian {
+  margin-bottom: 12px;
+  color: var(--vang-dam);
+}
 .dd-ten {
   margin: 0;
   font-size: 26px;
   font-weight: 600;
   line-height: 1.25;
 }
+.dd-sanh {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-style: italic;
+}
 .dd-dia-chi {
   margin: 6px 0 18px;
-  font-size: 18px;
+  font-size: 17px;
   color: var(--reu);
+  text-wrap: balance;   /* không để rớt một chữ lẻ xuống dòng */
 }
+.the p:empty { display: none; }
+
+/* Dòng gợi ý dưới các khung thiệp */
+.goi-y {
+  margin: 14px 0 0;
+  text-align: center;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--reu);
+  text-shadow: 0 0 6px var(--kem), 0 0 14px var(--kem), 0 0 22px var(--kem);
+}
+.goi-y[hidden] { display: none; }
 .ban-do {
   height: 320px;
   border: 1px solid var(--reu-nhat);

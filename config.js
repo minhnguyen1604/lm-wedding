@@ -11,20 +11,22 @@ window.THIEP = {
   //    Ảnh nào chưa có thì trang tự hiện khung trống.
   thiep: [
     "images/thiep/1.jpg",   // lời mời (mặt sau thiệp giấy)
-    "images/thiep/2.jpg",   // timeline (mặt trước thiệp giấy)
+    "images/thiep/2.jpg",   // timeline (mặt trước thiệp giấy, đã bỏ mã QR và lề trống)
   ],
 
   // 2) ĐỊA ĐIỂM
   diaDiem: {
+    thoiGian: "17h30 · Thứ Bảy · 02.01.2027",
     ten: "Khách sạn Meliá Hà Nội",
-    diaChi: "44B Lý Thường Kiệt, Hà Nội",
+    sanh: "Hội trường Grand Ballroom – Tầng 2",
+    diaChi: "44B Lý Thường Kiệt, Phường Cửa Nam, Hà Nội",
     // Từ khoá để ghim trên Google Maps (tên + địa chỉ), hoặc toạ độ "21.0288,105.8525"
     ghimBanDo: "Khách sạn Meliá Hanoi, 44B Lý Thường Kiệt, Hà Nội",
   },
 
   // 3) ALBUM ẢNH CƯỚI
   //    Chép ảnh vào thư mục images/gallery/ rồi liệt kê tên file ở đây.
-  //    Để trống [] thì trang hiện các ô ảnh mẫu.
+  //    Để trống [] thì mục album tự ẩn.
   gallery: [
     // "images/gallery/01.jpg",
     // "images/gallery/02.jpg",

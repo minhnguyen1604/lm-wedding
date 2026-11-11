@@ -44,6 +44,22 @@ git push
 
 Khoảng 1–2 phút sau link công khai đổi theo.
 
+## Album ảnh cưới (cuộn ngang)
+
+Chép ảnh vào `images/gallery/` rồi liệt kê tên file trong mục `gallery` của `config.js`.
+Chưa có ảnh nào thì mục album tự ẩn.
+
+## Xác nhận tham dự → Google Sheet
+
+Khách điền form trên thiệp; thiệp gửi dữ liệu vào một Google Form, Form tự ghi vào Google Sheet.
+Mục này chỉ hiện khi `xacNhan.formUrl` trong `config.js` đã được điền.
+
+1. Tạo Google Form (nên dùng Gmail cá nhân) với 5 câu hỏi kiểu **Trả lời ngắn**, riêng câu cuối kiểu **Đoạn**:
+   Họ và tên · Tham dự · Số người · Khách mời của · Lời chúc. Không bật "Bắt buộc".
+2. Trong Cài đặt: không thu thập email, không giới hạn 1 câu trả lời, không yêu cầu đăng nhập.
+3. Tab Câu trả lời → Liên kết với Trang tính.
+4. Xuất bản form, lấy link và mã `entry.xxxxx` của từng câu hỏi, điền vào `xacNhan` trong `config.js`.
+
 ## Tạo lại mã QR (chỉ khi thật sự cần)
 
 ```bash

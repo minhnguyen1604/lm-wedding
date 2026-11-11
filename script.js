@@ -3,6 +3,7 @@
 
   var C = window.THIEP || {};
   var $ = function (id) { return document.getElementById(id); };
+  var giamChuyenDong = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.documentElement.classList.add("js");
 
   /* ---------- Logo đầu trang / chữ cuối trang ---------- */
@@ -81,29 +82,197 @@
     $("dd-chi-duong").href = "https://www.google.com/maps/dir/?api=1&destination=" + q;
   }
 
-  /* ---------- 3. Album ---------- */
-  var luoi = $("luoi-anh");
+  /* ---------- 3. Xác nhận tham dự ---------- */
+  var xn = C.xacNhan || {};
+  if (xn.formUrl) {
+    $("xac-nhan").hidden = false;
+    $("nut-xac-nhan").hidden = false;
+    $("xn-han").textContent = xn.hanChot || "";
+
+    var form = $("xn-form"), nutGui = $("xn-gui"), hopLoi = $("xn-loi");
+    var KHOA = "lm-xac-nhan";
+    var soNguoi = 1;
+
+    var chon = function (ten) {
+      var o = form.querySelector('input[name="' + ten + '"]:checked');
+      return o ? o.value : "";
+    };
+    var baoLoi = function (chu, oCanSua) {
+      hopLoi.textContent = chu;
+      hopLoi.hidden = false;
+      if (oCanSua) oCanSua.focus();
+    };
+    var hienCamOn = function (coDen) {
+      $("xn-cam-on").textContent = coDen
+        ? "Xin cảm ơn! Đã ghi nhận xác nhận tham dự. Rất mong được đón tiếp trong ngày vui."
+        : "Xin cảm ơn đã báo tin. Rất tiếc vì không được đón tiếp trong ngày vui này.";
+      form.hidden = true;
+      $("xn-xong").hidden = false;
+    };
+
+    // Chọn "Sẽ tham dự" thì mới hỏi số người
+    Array.prototype.forEach.call(form.querySelectorAll('input[name="thamDu"]'), function (o) {
+      o.addEventListener("change", function () {
+        $("xn-neu-co").hidden = chon("thamDu").indexOf("Sẽ") !== 0;
+      });
+    });
+    var doiSo = function (buoc) {
+      soNguoi = Math.min(10, Math.max(1, soNguoi + buoc));
+      $("xn-so").textContent = soNguoi;
+    };
+    $("xn-tru").addEventListener("click", function () { doiSo(-1); });
+    $("xn-cong").addEventListener("click", function () { doiSo(1); });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      hopLoi.hidden = true;
+      var ten = $("xn-ten").value.trim();
+      var thamDu = chon("thamDu");
+      var khachCua = chon("khachCua");
+      if (!ten) return baoLoi("Xin vui lòng điền họ và tên.", $("xn-ten"));
+      if (!thamDu) return baoLoi("Xin vui lòng chọn có tham dự hay không.");
+      if (!khachCua) return baoLoi("Xin vui lòng chọn khách mời của nhà trai hay nhà gái.");
+      var coDen = thamDu.indexOf("Sẽ") === 0;
+
+      // Máy gửi tự động thường điền cả ô bẫy: coi như xong nhưng không gửi đi
+      if (form.elements.website.value) return hienCamOn(coDen);
+
+      var t = xn.truong || {};
+      var duLieu = new URLSearchParams();
+      var them = function (ma, giaTri) { if (ma) duLieu.append(ma, giaTri); };
+      them(t.ten, ten);
+      them(t.thamDu, thamDu);
+      them(t.soNguoi, coDen ? String(soNguoi) : "0");
+      them(t.khachCua, khachCua);
+      them(t.loiChuc, $("xn-loi-chuc").value.trim());
+
+      nutGui.disabled = true;
+      nutGui.textContent = "Đang gửi…";
+      // Google Form không cho trang khác đọc phản hồi (no-cors), nên chỉ biết được là đã gửi đi
+      fetch(xn.formUrl, { method: "POST", mode: "no-cors", body: duLieu })
+        .then(function () {
+          try { localStorage.setItem(KHOA, JSON.stringify({ coDen: coDen })); } catch (loi) { /* không lưu được cũng không sao */ }
+          hienCamOn(coDen);
+          $("xn-cam-on").focus();
+        })
+        .catch(function () {
+          baoLoi("Chưa gửi được. Xin kiểm tra kết nối mạng rồi thử lại.");
+        })
+        .then(function () {
+          nutGui.disabled = false;
+          nutGui.textContent = "Gửi xác nhận";
+        });
+    });
+
+    $("xn-sua").addEventListener("click", function () {
+      try { localStorage.removeItem(KHOA); } catch (loi) { /* bỏ qua */ }
+      $("xn-xong").hidden = true;
+      form.hidden = false;
+      $("xn-ten").focus();
+    });
+
+    // Khách đã xác nhận trên máy này thì lần sau mở lại thấy luôn lời cảm ơn
+    try {
+      var cu = JSON.parse(localStorage.getItem(KHOA) || "null");
+      if (cu) hienCamOn(!!cu.coDen);
+    } catch (loi) { /* bỏ qua */ }
+  }
+
+  /* ---------- 4. Album cuộn ngang ---------- */
+  var dai = $("dai-anh");
   var album = C.gallery || [];
 
   if (!album.length) {
     // Chưa có ảnh cưới thì ẩn hẳn mục album
     $("album").hidden = true;
   } else {
+    var dsO = function () { return Array.prototype.slice.call(dai.children); };
+    var dangO = 0;        // ảnh đang nằm giữa
+    var tuChay = null;    // bộ hẹn giờ tự trôi
+
     album.forEach(function (src, i) {
       var o = document.createElement("button");
       o.type = "button";
       o.className = "o-anh";
-      o.setAttribute("aria-label", "Xem ảnh " + (i + 1));
+      o.setAttribute("aria-label", "Xem to ảnh " + (i + 1));
       var img = document.createElement("img");
       img.loading = "lazy";
       img.alt = "Ảnh cưới " + (i + 1);
-      img.onerror = function () { o.remove(); };
+      img.draggable = false;
+      img.onerror = function () { o.remove(); capNhat(); };
       img.src = src;
       o.appendChild(img);
-      o.addEventListener("click", function () { moAnh(album, i); });
-      luoi.appendChild(o);
-      theoDoi(o);
+      o.addEventListener("click", function () {
+        var ds = dsO().map(function (x) { return x.firstChild.src; });
+        dung();
+        moAnh(ds, dsO().indexOf(o), o);
+      });
+      dai.appendChild(o);
     });
+    theoDoi(dai);
+    theoDoi($("dai-dk"));
+
+    // Ảnh ở giữa rõ và to nhất; càng xa giữa càng nhỏ và mờ
+    var capNhat = function () {
+      var ds = dsO();
+      var giua = dai.scrollLeft + dai.clientWidth / 2;
+      var ganNhat = Infinity;
+      ds.forEach(function (o, i) {
+        var lech = Math.abs(o.offsetLeft + o.offsetWidth / 2 - giua);
+        var t = Math.min(lech / (o.offsetWidth + 12), 1);
+        o.style.setProperty("--co", (1 - t * 0.1).toFixed(3));
+        o.style.setProperty("--ro", (1 - t * 0.5).toFixed(3));
+        if (lech < ganNhat) { ganNhat = lech; dangO = i; }
+      });
+      $("da-dem").textContent = ds.length ? (dangO + 1) + " / " + ds.length : "";
+    };
+    var den = function (i) {
+      var ds = dsO();
+      if (!ds.length) return;
+      var o = ds[(i + ds.length) % ds.length];
+      dai.scrollTo({
+        left: o.offsetLeft + o.offsetWidth / 2 - dai.clientWidth / 2,
+        behavior: giamChuyenDong ? "auto" : "smooth"
+      });
+    };
+
+    var choVe = false;
+    dai.addEventListener("scroll", function () {
+      if (choVe) return;
+      choVe = true;
+      requestAnimationFrame(function () { choVe = false; capNhat(); });
+    }, { passive: true });
+    window.addEventListener("resize", capNhat);
+    capNhat();
+
+    // Tự trôi chậm khi album đang trong tầm nhìn; khách chạm vào là dừng hẳn
+    var daDung = false;
+    var dung = function () {
+      if (tuChay) clearInterval(tuChay);
+      tuChay = null;
+      daDung = true;
+    };
+    ["pointerdown", "touchstart", "wheel", "keydown"].forEach(function (sk) {
+      dai.addEventListener(sk, dung, { passive: true });
+    });
+    $("da-truoc").addEventListener("click", function () { dung(); den(dangO - 1); });
+    $("da-sau").addEventListener("click", function () { dung(); den(dangO + 1); });
+    dai.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); den(dangO - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); den(dangO + 1); }
+    });
+
+    if (!giamChuyenDong && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (ds) {
+        var thay = ds[0].isIntersecting;
+        if (tuChay) { clearInterval(tuChay); tuChay = null; }
+        if (thay && !daDung) {
+          tuChay = setInterval(function () {
+            if (hop.hidden && !document.hidden) den(dangO + 1);
+          }, 4000);
+        }
+      }, { threshold: 0.6 }).observe(dai);
+    }
   }
 
   /* ---------- Xem ảnh phóng to ---------- */
@@ -114,10 +283,10 @@
     hopImg.src = dsAnh[viTri];
     hopDem.textContent = (viTri + 1) + " / " + dsAnh.length;
   }
-  function moAnh(ds, i) {
+  function moAnh(ds, i, nutMo) {
     dsAnh = ds;
     viTri = Math.max(0, i);
-    phanTuTruoc = document.activeElement;
+    phanTuTruoc = nutMo || null;   // nút đã mở ảnh, để trả lại tiêu điểm khi đóng
     hop.classList.toggle("mot-anh", ds.length < 2);
     ve();
     hop.hidden = false;
@@ -128,7 +297,8 @@
     hop.hidden = true;
     hopImg.removeAttribute("src");
     document.body.classList.remove("khoa-cuon");
-    if (phanTuTruoc && phanTuTruoc.focus) phanTuTruoc.focus();
+    // preventScroll: đóng ảnh xong trang đứng yên, không nhảy đi chỗ khác
+    if (phanTuTruoc && phanTuTruoc.focus) phanTuTruoc.focus({ preventScroll: true });
   }
   function chuyen(buoc) {
     if (dsAnh.length < 2) return;

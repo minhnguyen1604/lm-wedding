@@ -38,6 +38,7 @@
     <section class="phan" id="thiep" aria-label="Thông tin đám cưới">
       <div class="ds-khung" id="ds-khung"></div>
       <p class="goi-y" id="goi-y" hidden>Chạm vào thiệp để phóng to</p>
+      <a class="nut nut-vien" id="nut-xac-nhan" href="#xac-nhan" hidden>Xác nhận tham dự</a>
     </section>
 
     <!-- 2. Địa điểm -->
@@ -72,7 +73,69 @@
       </div>
     </section>
 
-    <!-- 3. Album ảnh cưới -->
+    <!-- 3. Xác nhận tham dự (chỉ hiện khi đã khai báo Google Form trong config.js) -->
+    <section class="phan" id="xac-nhan" hidden>
+      <div class="tieu-de cuon">
+        <p class="chu-nho">Rất mong được đón tiếp</p>
+        <h2>Xác nhận tham dự</h2>
+        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          <circle cx="50" cy="6" r="1" fill="currentColor"/>
+          <circle cx="70" cy="6" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="the cuon">
+        <form id="xn-form" novalidate>
+          <p class="xn-han" id="xn-han"></p>
+
+          <label class="xn-nhan" for="xn-ten">Họ và tên</label>
+          <input class="xn-o" id="xn-ten" name="ten" type="text" autocomplete="name" maxlength="80">
+
+          <fieldset class="xn-nhom">
+            <legend class="xn-nhan">Tham dự</legend>
+            <div class="xn-chon">
+              <label><input type="radio" name="thamDu" value="Sẽ tham dự"><span>Sẽ tham dự</span></label>
+              <label><input type="radio" name="thamDu" value="Không thể tham dự"><span>Rất tiếc, không thể tham dự</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="xn-nhom" id="xn-neu-co" hidden>
+            <legend class="xn-nhan">Số người tham dự</legend>
+            <div class="xn-dem">
+              <button type="button" id="xn-tru" aria-label="Bớt một người">&minus;</button>
+              <output id="xn-so" aria-live="polite">1</output>
+              <button type="button" id="xn-cong" aria-label="Thêm một người">+</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="xn-nhom">
+            <legend class="xn-nhan">Khách mời của</legend>
+            <div class="xn-chon hai-cot">
+              <label><input type="radio" name="khachCua" value="Nhà trai"><span>Nhà trai</span></label>
+              <label><input type="radio" name="khachCua" value="Nhà gái"><span>Nhà gái</span></label>
+            </div>
+          </fieldset>
+
+          <label class="xn-nhan" for="xn-loi-chuc">Lời chúc <i>(không bắt buộc)</i></label>
+          <textarea class="xn-o" id="xn-loi-chuc" name="loiChuc" rows="3" maxlength="500"></textarea>
+
+          <!-- Ô bẫy cho máy gửi tự động; người thật không thấy ô này -->
+          <input class="xn-bay" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <p class="xn-loi" id="xn-loi" role="alert" hidden></p>
+          <button class="nut" type="submit" id="xn-gui">Gửi xác nhận</button>
+        </form>
+
+        <div id="xn-xong" hidden>
+          <p class="xn-cam-on" id="xn-cam-on" tabindex="-1"></p>
+          <button type="button" class="xn-sua" id="xn-sua">Gửi lại xác nhận khác</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Album ảnh cưới (cuộn ngang) -->
     <section class="phan" id="album">
       <div class="tieu-de cuon">
         <p class="chu-nho">Khoảnh khắc của chúng mình</p>
@@ -84,7 +147,12 @@
           <circle cx="70" cy="6" r="1" fill="currentColor"/>
         </svg>
       </div>
-      <div class="luoi-anh" id="luoi-anh"></div>
+      <div class="dai-anh" id="dai-anh" tabindex="0" role="group" aria-label="Album ảnh cưới, vuốt ngang để xem"></div>
+      <div class="dai-dk" id="dai-dk">
+        <button type="button" id="da-truoc" aria-label="Ảnh trước">&lsaquo;</button>
+        <span id="da-dem" aria-live="off"></span>
+        <button type="button" id="da-sau" aria-label="Ảnh sau">&rsaquo;</button>
+      </div>
     </section>
 
     <footer class="ket cuon">

@@ -24,7 +24,24 @@ window.THIEP = {
     ghimBanDo: "Khách sạn Meliá Hanoi, 44B Lý Thường Kiệt, Hà Nội",
   },
 
-  // 3) ALBUM ẢNH CƯỚI
+  // 3) XÁC NHẬN THAM DỰ — khách điền trên thiệp, dữ liệu ghi về Google Sheet qua một Google Form
+  //    Để formUrl là "" thì mục này (và nút "Xác nhận tham dự") tự ẩn.
+  xacNhan: {
+    // Địa chỉ nhận của Google Form, dạng: https://docs.google.com/forms/d/e/XXXX/formResponse
+    formUrl: "",
+    // Mã của từng câu hỏi trong Google Form (dạng "entry.123456789")
+    truong: {
+      ten: "",
+      thamDu: "",
+      soNguoi: "",
+      khachCua: "",
+      loiChuc: "",
+    },
+    // Dòng nhắc hạn chót, ví dụ "Xin vui lòng xác nhận trước ngày 20.12.2026" (để "" nếu không cần)
+    hanChot: "",
+  },
+
+  // 4) ALBUM ẢNH CƯỚI (cuộn ngang)
   //    Chép ảnh vào thư mục images/gallery/ rồi liệt kê tên file ở đây.
   //    Để trống [] thì mục album tự ẩn.
   gallery: [

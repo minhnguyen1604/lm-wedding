@@ -7,6 +7,9 @@ __pycache__/
 # ảnh dùng cho trang nằm trong images/
 /*.jpg
 /*.jpeg
+# Trang thử trên máy (ảnh giả + form giả lập), không đưa lên
+/thu.html
+/_thu/
 # Bản trùng của mã QR (đã có trong qr/)
 /qr-thiep-den.png
 /qr-thiep-reu.png

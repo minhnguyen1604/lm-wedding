@@ -25,6 +25,9 @@ body {
   line-height: 1.5;
   color: var(--reu-dam);
   -webkit-font-smoothing: antialiased;
+  /* Font này mặc định dùng chữ số kiểu cổ (số 3, 7, 9 thò xuống dưới dòng);
+     ép về chữ số cao đều để ngày giờ, số nhà thẳng hàng */
+  font-variant-numeric: lining-nums;
 }
 
 /* ---------- Nền hoa mờ ---------- */

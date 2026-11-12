@@ -42,7 +42,11 @@ Tải trang: lúc mới mở link chỉ ~0,9 MB; nhạc tải khi bấm "Mở th
 | `qr/` | Mã QR (PNG, SVG) và script tạo mã `tao_qr.py` |
 | `QR-thiep-cuoi-*.pdf` | Mã QR bản PDF vector để gửi nhà in |
 
-`_thu/`, `thu.html` và các file ảnh thả ở thư mục ngoài cùng chỉ để thử trên máy, không đưa lên GitHub.
+Các file chỉ để thử / tham khảo, không dùng trên thiệp:
+`_thu/` (nhạc thử WAV, bảng so sánh phông chữ, ảnh xem trước đã bỏ...), `thu.html` (trang thử),
+`anhcuoi/` và các ảnh tên dài ở thư mục ngoài cùng (bản gốc như anh gửi, trùng với `nguon/`),
+`qr-thiep-*.png` ở thư mục ngoài cùng (trùng với `qr/`).
+Lưu ý: vì repo dùng cho GitHub Pages nên các file này cũng mở được qua link, ví dụ `.../lm-wedding/thu.html`.
 
 ## Làm việc trên máy khác
 

@@ -487,6 +487,304 @@ textarea.xn-o {
 .ket p { margin: 0; }
 .ket p:empty { display: none; }
 
+/* ---------- Cô dâu chú rể kiểu lego ---------- */
+.doi {
+  --bb-rong: 92px;
+  --bb-da: #f6cb2e;        /* vàng tươi của đồ chơi */
+  --bb-da-dam: #dcae17;
+  --bb-vest: #1e1e1e;
+  --bb-giay: #0d0d0d;
+  --bb-trang: #ffffff;
+  --bb-de: #ecebe4;
+  --bb-toc: #2a201a;
+  --bb-toc-nu: #3a281d;
+  --bb-hong: #f29bb5;
+  --bb-hong-dam: #e2578f;
+  --bb-la: #5a9a55;
+  --bb-vang: #d9b25a;
+  --bb-voan: rgba(255, 255, 255, .72);
+  --bb-vien: rgba(60, 50, 30, .3);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.doi[hidden] { display: none; }
+.bup-be {
+  display: block;
+  flex: none;
+  width: var(--bb-rong);
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 5px 6px rgba(60, 55, 35, .22));
+}
+/* Cô dâu đứng sát chú rể vừa đủ để hai bàn tay chạm nhau khi nắm tay */
+.co-dau { margin-left: calc(var(--bb-rong) * -0.15); }
+
+.bup-be .tay,
+.bup-be .chan,
+.bup-be .mat {
+  transform-box: fill-box;
+}
+/* Tay xoay quanh vai, chân xoay quanh hông như đồ chơi thật */
+.bup-be .tay { transform-origin: 50% 5px; transition: transform .45s ease; }
+.bup-be .tay-t { transform: rotate(12deg); }
+.bup-be .tay-p { transform: rotate(-12deg); }
+.bup-be .chan { transform-origin: 50% 0; }
+.bup-be .mat { transform-origin: 50% 50%; animation: chop-mat 4.6s infinite; }
+.co-dau .mat { animation-delay: 1.3s; }
+
+/* Nắm tay: tay phía trong của hai người đưa về phía nhau */
+.doi.nam-tay .chu-re .tay-p { transform: rotate(-38deg); }
+.doi.nam-tay .co-dau .tay-t { transform: rotate(38deg); }
+
+/* Bước đi */
+.doi.dang-di .than { animation: nhun 0.36s ease-in-out infinite alternate; }
+.doi.dang-di .chan-t { animation: buoc 0.36s ease-in-out infinite alternate; }
+.doi.dang-di .chan-p { animation: buoc 0.36s ease-in-out infinite alternate-reverse; }
+
+/* Khi dùng ảnh lego thật thay cho hình vẽ: hai ảnh cắt từ một tấm, đứng sát là liền lại như ảnh gốc */
+.doi-anh .bup-be {
+  width: auto;
+  height: calc(var(--bb-rong) * 1.5);
+  filter: drop-shadow(0 4px 5px rgba(60, 55, 35, .16));
+  transform-origin: 50% 100%;
+}
+.doi-anh .co-dau { margin-left: 0; }
+/* Ảnh không co duỗi tay chân được nên bước đi bằng cách lắc lư nhè nhẹ */
+.doi-anh.dang-di .chu-re { animation: lac-lu 0.34s ease-in-out infinite alternate; }
+.doi-anh.dang-di .co-dau { animation: lac-lu 0.34s ease-in-out infinite alternate-reverse; }
+@keyframes lac-lu {
+  from { transform: rotate(-3.5deg) translateY(0); }
+  50% { transform: rotate(0deg) translateY(-3px); }
+  to { transform: rotate(3.5deg) translateY(0); }
+}
+
+/* Đung đưa theo nhạc ở cuối thiệp: nhạc tắt thì đứng yên */
+.doi-nhay {
+  margin: 0 0 22px;
+  transform-origin: 50% 100%;
+  animation: lac 2.8s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+.co-nhac .doi-nhay,
+.khong-nhac .doi-nhay { animation-play-state: running; }
+
+@keyframes chop-mat {
+  0%, 94%, 100% { transform: scaleY(1); }
+  96.5% { transform: scaleY(.12); }
+}
+@keyframes nhun {
+  from { transform: translateY(0); }
+  to { transform: translateY(-2.5px); }
+}
+@keyframes buoc {
+  from { transform: rotate(-14deg); }
+  to { transform: rotate(14deg); }
+}
+@keyframes lac {
+  from { transform: rotate(-3.2deg) translateY(0); }
+  50% { transform: rotate(0deg) translateY(-3px); }
+  to { transform: rotate(3.2deg) translateY(0); }
+}
+
+/* ---------- Màn mở thiệp ---------- */
+.bia {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: var(--kem-ngoai);
+  transition: opacity .9s ease, visibility .9s;
+}
+.bia[hidden] { display: none; }
+.bia.dang-dong {
+  opacity: 0;
+  visibility: hidden;
+}
+.bia-nen {
+  position: absolute;
+  z-index: 0;
+  height: 100%;
+}
+.bia-phao {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.bia-trong {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(100%, var(--rong));
+  height: 100%;
+  padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+}
+
+/* Không dùng khung: một quầng kem mềm ở giữa cho chữ dễ đọc, nền hoa lộ dần ra bốn phía */
+.bia-trong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 92% 60% at 50% 47%,
+    rgba(252, 249, 242, .97) 0%, rgba(252, 249, 242, .92) 52%, rgba(252, 249, 242, 0) 100%);
+  pointer-events: none;
+}
+.bia-vom {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.5vh, 14px);
+  padding: 12px 8px;
+  text-align: center;
+}
+/* Các phần lần lượt hiện lên */
+.bia-vom > * {
+  opacity: 0;
+  animation: hien-len 1s ease forwards;
+}
+.bia-vom > :nth-child(1) { animation-delay: .15s; }
+.bia-vom > :nth-child(2) { animation-delay: .45s; }
+.bia-vom > :nth-child(3) { animation-delay: .7s; }
+.bia-vom > :nth-child(4) { animation-delay: 1s; }
+.bia-vom > :nth-child(5) { animation-delay: 1.15s; }
+.bia-vom > :nth-child(6) { animation-delay: 1.45s; }
+.bia-vom > :nth-child(7) { animation-delay: 1.9s; }
+@keyframes hien-len {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.bia-logo {
+  display: block;
+  width: clamp(84px, 27vw, 118px);
+  height: auto;
+  margin-bottom: clamp(2px, 1vh, 10px);
+}
+.bia-logo[hidden] { display: none; }
+/* Chữ trên màn mở thiệp chỉ còn hai dòng: tên và ngày */
+.bia-ten {
+  margin: clamp(6px, 1.6vh, 16px) 0 0;
+  font-size: clamp(27px, 8.2vw, 36px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--reu-dam);
+  text-wrap: balance;
+}
+.bia-ngay {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: clamp(2px, .8vh, 8px) 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .3em;
+  color: var(--vang-dam);
+}
+/* hai vạch mảnh hai bên ngày */
+.bia-ngay::before,
+.bia-ngay::after {
+  content: "";
+  width: 30px;
+  height: 1px;
+  background: var(--vang);
+}
+.bia-ngay:empty { display: none; }
+
+/* Hai nhân vật lego đứng trên một vạch nền mảnh */
+.bia-san {
+  margin-top: clamp(10px, 2.6vh, 28px);
+  padding: 0 34px 7px;
+  background: linear-gradient(90deg, transparent, var(--vang) 30%, var(--vang) 70%, transparent) bottom / 100% 1px no-repeat;
+}
+.bia-doi { --bb-rong: clamp(74px, 24vw, 98px); }
+.bia-doi.doi-anh { --bb-rong: clamp(74px, min(29vw, 13.5vh), 116px); }
+/* Lúc đầu hai nhân vật đứng cách nhau; chạm "Mở thiệp" thì bước lại gần */
+.bia-doi .bup-be { transition: translate 1.3s ease-in-out; }
+.bia-doi .chu-re { translate: -20px 0; }
+.bia-doi .co-dau { translate: 20px 0; }
+.bia-doi.gan .bup-be { translate: 0 0; }
+
+/* Nút mở thiệp: viền mảnh, có quầng sáng nhè nhẹ mời chạm */
+.bia-nut {
+  margin-top: clamp(12px, 2.6vh, 26px);
+  padding: 13px 40px 13px 44px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .36em;
+  text-transform: uppercase;
+  color: var(--reu-dam);
+  background: rgba(255, 253, 248, .7);
+  border: 1px solid var(--vang-dam);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .25s, color .25s;
+}
+.bia-nut:hover,
+.bia-nut:focus-visible {
+  color: #fffdf8;
+  background: var(--vang-dam);
+  outline: none;
+}
+.bia-vom > .bia-nut {
+  animation: hien-len 1s ease 1.9s forwards, moi-cham 2.6s ease-in-out 3s infinite;
+}
+.bia-vom > .bia-nut.an {
+  animation: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s;
+}
+@keyframes moi-cham {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 162, 75, .5); }
+  60% { box-shadow: 0 0 0 11px rgba(201, 162, 75, 0); }
+}
+
+/* ---------- Đĩa nhạc ---------- */
+.dia {
+  position: fixed;
+  z-index: 5;
+  right: max(14px, calc(50% - var(--rong) / 2 + 14px));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(44, 47, 36, .35);
+  cursor: pointer;
+}
+.dia[hidden] { display: none; }
+.dia svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.dia:focus-visible {
+  outline: 2px solid var(--reu);
+  outline-offset: 3px;
+}
+.dia-quay {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: quay 5s linear infinite;
+  animation-play-state: paused;
+}
+.co-nhac .dia-quay { animation-play-state: running; }
+/* Gạch chéo báo nhạc đang tắt */
+.dia-gach { transition: opacity .25s; }
+.co-nhac .dia-gach { opacity: 0; }
+@keyframes quay { to { transform: rotate(360deg); } }
+
 /* ---------- Xem ảnh phóng to ---------- */
 .xem-anh {
   position: fixed;
@@ -554,6 +852,9 @@ body.khoa-cuon { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .doi-nhay, .bup-be .mat, .dia-quay { animation: none; }
+  .bia-doi .bup-be { transition: none; }
+  .bia-vom > *, .bia-vom > .bia-nut { animation: none; opacity: 1; }
   .js .cuon { opacity: 1; transform: none; transition: none; }
 }
 

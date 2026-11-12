@@ -44,6 +44,16 @@ git push
 
 Khoảng 1–2 phút sau link công khai đổi theo.
 
+## Màn mở thiệp, nhạc, đôi lego
+
+Mục `moThiep` trong `config.js`. Khách vào link thấy màn "Mở thiệp" trước; chạm vào thì hai hình
+lego bước lại gần nhau, pháo hoa nổ, nhạc Canon in D bắt đầu (trình duyệt điện thoại chỉ cho phát
+nhạc sau một lần chạm). Đĩa nhạc ở góc dưới để tắt/bật; cuối thiệp có đôi lego đung đưa theo nhạc.
+
+- Nhạc: `audio/canon-in-d.mp3` — bản hộp nhạc tổng hợp từ nốt nhạc (không dùng bản thu của ai).
+- Ảnh lego: `images/lego-chu-re.png`, `images/lego-co-dau.png` (nền trong suốt).
+- Đặt `bat: false` để tắt toàn bộ phần này.
+
 ## Album ảnh cưới (cuộn ngang)
 
 Chép ảnh vào `images/gallery/` rồi liệt kê tên file trong mục `gallery` của `config.js`.

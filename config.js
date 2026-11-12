@@ -6,6 +6,19 @@ window.THIEP = {
   // Logo ở đầu trang (để "" nếu không muốn hiện)
   logo: "images/logo-lm.png",
 
+  // 0) MÀN MỞ THIỆP + NHẠC + ĐÔI BÚP BÊ
+  //    bat: true thì khách vào link thấy màn "Mở thiệp" trước; chạm vào thì hai búp bê bước lại
+  //    gần nhau, pháo hoa nổ, nhạc bắt đầu, và ở cuối thiệp có đôi búp bê đung đưa theo nhạc.
+  moThiep: {
+    bat: true,
+    ten: "Save the date",   // dòng chữ dưới logo trên màn mở thiệp
+    ngay: "02 . 01 . 2027",
+    // Ảnh hai hình lego (nền trong suốt). Để "" thì dùng hình vẽ sẵn.
+    hinh: { chuRe: "images/lego-chu-re.png", coDau: "images/lego-co-dau.png" },
+    // File nhạc, ví dụ "audio/canon-in-d.mp3". Để "" thì không có nhạc và không có đĩa nhạc.
+    nhac: "audio/canon-in-d.mp3",
+  },
+
   // 1) CÁC KHUNG THIỆP (ảnh thiết kế thông tin đám cưới)
   //    Chép ảnh vào thư mục images/thiep/ rồi ghi tên file ở đây.
   //    Ảnh nào chưa có thì trang tự hiện khung trống.

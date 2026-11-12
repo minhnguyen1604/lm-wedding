@@ -60,7 +60,6 @@
     img.alt = "Thiệp cưới – trang " + (i + 1);
     img.onload = function () {
       khung.replaceChild(img, trong);
-      $("goi-y").hidden = false;
       img.addEventListener("click", function () {
         var ds = Array.prototype.map.call(dsKhung.querySelectorAll("img"), function (x) { return x.src; });
         moAnh(ds, ds.indexOf(img.src));

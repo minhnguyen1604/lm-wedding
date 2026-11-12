@@ -72,6 +72,10 @@ XOA_HAN = (
 )
 for x0, y0, x1, y1 in XOA_HAN:
     hinh_goc[y0:y1, x0:x1] = False
+# Khôi phục chóp mũ chú rể: các ô xoá cành lá ở trên lẹm vào góc trái đỉnh mũ.
+# Trong khung chóp mũ (ảnh gốc x 60–114, y 22–62) giữ lại mọi điểm không phải nền trắng.
+x0, y0, x1, y1 = 181, 66, 345, 186   # mép trái 181 để không kéo theo vòng nét vẽ nhỏ sát cạnh mũ
+hinh_goc[y0:y1, x0:x1] |= sang[y0:y1, x0:x1] < 230
 # Nhánh vẽ bằng mực đen cạnh bó hoa: chỉ xoá các điểm đen không màu, không đụng vào cánh hoa
 do_mau = a.max(axis=2) - a.min(axis=2)
 for x0, y0, x1, y1 in ((1085, 440, W, 512),):

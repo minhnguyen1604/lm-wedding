@@ -565,6 +565,8 @@
       setTimeout(function () {
         phaoHoa($("bia-phao"), function () { setTimeout(dongBia, 150); });
       }, 1650);
+      // Phòng khi máy tạm dừng hoạt ảnh (tiết kiệm pin, chuyển ứng dụng): vẫn tự mở thiệp sau ~5 giây
+      setTimeout(dongBia, 5200);
     };
     biaNut.addEventListener("click", function (e) { e.stopPropagation(); moThiep(); });
     bia.addEventListener("click", function () { if (daMo) dongBia(); });

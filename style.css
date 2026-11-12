@@ -223,19 +223,7 @@ body {
 button.nut { cursor: pointer; }
 button.nut:disabled { opacity: .6; cursor: default; }
 
-/* Nút viền (nút phụ): nhảy xuống mục xác nhận tham dự */
-.nut-vien {
-  width: fit-content;
-  margin: 18px auto 0;
-  padding: 12px 28px;
-  color: var(--reu-dam);
-  background: rgba(255, 253, 248, .8);
-}
-.nut-vien:hover,
-.nut-vien:focus-visible { color: #fffdf8; }
-
-/* ---------- 3. Xác nhận tham dự ---------- */
-#xac-nhan { scroll-margin-top: 18px; }   /* bấm nút nhảy xuống thì tiêu đề không dính sát mép trên */
+/* ---------- 2. Xác nhận tham dự ---------- */
 .xn-han {
   margin: 0 0 4px;
   font-size: 17px;

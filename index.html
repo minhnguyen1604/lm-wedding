@@ -54,30 +54,9 @@
     <!-- 1. Các khung thiệp -->
     <section class="phan" id="thiep" aria-label="Thông tin đám cưới">
       <div class="ds-khung" id="ds-khung"></div>
-      <a class="nut nut-vien" id="nut-xac-nhan" href="#xac-nhan" hidden>Xác nhận tham dự</a>
     </section>
 
-    <!-- 2. Album ảnh cưới (cuộn ngang) -->
-    <section class="phan" id="album">
-      <div class="tieu-de cuon">
-        <p class="chu-nho">Những khoảnh khắc hạnh phúc</p>
-        <h2>Album ảnh cưới</h2>
-        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
-          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
-          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
-          <circle cx="50" cy="6" r="1" fill="currentColor"/>
-          <circle cx="70" cy="6" r="1" fill="currentColor"/>
-        </svg>
-      </div>
-      <div class="dai-anh" id="dai-anh" tabindex="0" role="group" aria-label="Album ảnh cưới, vuốt ngang để xem"></div>
-      <div class="dai-dk" id="dai-dk">
-        <button type="button" id="da-truoc" aria-label="Ảnh trước">&lsaquo;</button>
-        <span id="da-dem" aria-live="off"></span>
-        <button type="button" id="da-sau" aria-label="Ảnh sau">&rsaquo;</button>
-      </div>
-    </section>
-
-    <!-- 3. Xác nhận tham dự (chỉ hiện khi đã khai báo Google Form trong config.js) -->
+    <!-- 2. Xác nhận tham dự (chỉ hiện khi đã khai báo Google Form trong config.js) -->
     <section class="phan" id="xac-nhan" hidden>
       <div class="tieu-de cuon">
         <p class="chu-nho">Rất mong được đón tiếp</p>
@@ -142,6 +121,26 @@
           <p class="xn-cam-on" id="xn-cam-on" tabindex="-1"></p>
           <button type="button" class="xn-sua" id="xn-sua">Gửi lại xác nhận khác</button>
         </div>
+      </div>
+    </section>
+
+    <!-- 3. Album ảnh cưới (cuộn ngang) -->
+    <section class="phan" id="album">
+      <div class="tieu-de cuon">
+        <p class="chu-nho">Những khoảnh khắc hạnh phúc</p>
+        <h2>Album ảnh cưới</h2>
+        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          <circle cx="50" cy="6" r="1" fill="currentColor"/>
+          <circle cx="70" cy="6" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="dai-anh" id="dai-anh" tabindex="0" role="group" aria-label="Album ảnh cưới, vuốt ngang để xem"></div>
+      <div class="dai-dk" id="dai-dk">
+        <button type="button" id="da-truoc" aria-label="Ảnh trước">&lsaquo;</button>
+        <span id="da-dem" aria-live="off"></span>
+        <button type="button" id="da-sau" aria-label="Ảnh sau">&rsaquo;</button>
       </div>
     </section>
 

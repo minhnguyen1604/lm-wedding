@@ -85,7 +85,6 @@
   var xn = C.xacNhan || {};
   if (xn.formUrl) {
     $("xac-nhan").hidden = false;
-    $("nut-xac-nhan").hidden = false;
     $("xn-han").textContent = xn.hanChot || "";
 
     var form = $("xn-form"), nutGui = $("xn-gui"), hopLoi = $("xn-loi");

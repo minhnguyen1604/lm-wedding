@@ -262,8 +262,12 @@ button.nut:disabled { opacity: .6; cursor: default; }
   text-transform: uppercase;
   color: var(--reu);
 }
-.xn-han + .xn-nhan { margin-top: 16px; }
-.xn-han:empty + .xn-nhan { margin-top: 0; }
+.xn-han + .xn-nhom { margin-top: 14px; }
+.xn-han:empty + .xn-nhom { margin-top: 0; }
+.xn-buoc-2[hidden],
+.xn-chi-khi-co[hidden] { display: none; }
+/* Phần điền hiện ra nhẹ nhàng sau khi chọn có / không */
+.xn-buoc-2 { animation: hien-len .5s ease; }
 .xn-nhan i {
   font-weight: 400;
   letter-spacing: .04em;
@@ -659,13 +663,14 @@ textarea.xn-o {
 }
 .bia-logo[hidden] { display: none; }
 /* Chữ trên màn mở thiệp chỉ còn hai dòng: tên và ngày */
+/* "Save the date": chữ thư pháp, cùng kiểu với tiêu đề trên thiệp giấy */
 .bia-ten {
   margin: clamp(6px, 1.6vh, 16px) 0 0;
-  font-size: clamp(27px, 8.2vw, 36px);
+  font-family: "Pinyon Script", "Cormorant Garamond", cursive;
+  font-size: clamp(38px, 11.6vw, 50px);
   font-weight: 400;
-  font-style: italic;
-  line-height: 1.2;
-  color: var(--reu-dam);
+  line-height: 1.25;
+  color: var(--vang-dam);
   text-wrap: balance;
 }
 .bia-ngay {

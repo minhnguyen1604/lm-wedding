@@ -67,5 +67,5 @@ window.THIEP = {
   ],
 
   // Dòng chữ cuối trang
-  loiKet: "Sự hiện diện của bạn là niềm vinh hạnh của chúng mình",
+  loiKet: "Sự hiện diện của Quý khách là niềm vinh hạnh của gia đình chúng tôi.",
 };

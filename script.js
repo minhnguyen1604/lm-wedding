@@ -109,10 +109,17 @@
       $("xn-xong").hidden = false;
     };
 
-    // Chọn "Sẽ tham dự" thì mới hỏi số người
+    // Bước 1 chỉ có hai lựa chọn; chọn xong mới hiện phần điền:
+    //  - "Sẽ tham dự": họ tên, số người, khách nhà trai/gái, lời chúc
+    //  - "Không thể tham dự": chỉ họ tên, để gia đình biết ai báo vắng
+    var coDenDangChon = function () { return chon("thamDu").indexOf("Sẽ") === 0; };
     Array.prototype.forEach.call(form.querySelectorAll('input[name="thamDu"]'), function (o) {
       o.addEventListener("change", function () {
-        $("xn-neu-co").hidden = chon("thamDu").indexOf("Sẽ") !== 0;
+        var lanDau = $("xn-buoc-2").hidden;
+        $("xn-buoc-2").hidden = false;
+        $("xn-chi-khi-co").hidden = !coDenDangChon();
+        hopLoi.hidden = true;
+        if (lanDau) $("xn-ten").focus({ preventScroll: true });
       });
     });
     var doiSo = function (buoc) {
@@ -127,11 +134,11 @@
       hopLoi.hidden = true;
       var ten = $("xn-ten").value.trim();
       var thamDu = chon("thamDu");
-      var khachCua = chon("khachCua");
-      if (!ten) return baoLoi("Xin vui lòng điền họ và tên.", $("xn-ten"));
+      var coDen = coDenDangChon();
+      var khachCua = coDen ? chon("khachCua") : "";
       if (!thamDu) return baoLoi("Xin vui lòng chọn có tham dự hay không.");
-      if (!khachCua) return baoLoi("Xin vui lòng chọn khách mời của nhà trai hay nhà gái.");
-      var coDen = thamDu.indexOf("Sẽ") === 0;
+      if (!ten) return baoLoi("Xin vui lòng điền họ và tên.", $("xn-ten"));
+      if (coDen && !khachCua) return baoLoi("Xin vui lòng chọn khách mời của nhà trai hay nhà gái.");
 
       // Máy gửi tự động thường điền cả ô bẫy: coi như xong nhưng không gửi đi
       if (form.elements.website.value) return hienCamOn(coDen);
@@ -143,7 +150,7 @@
       them(t.thamDu, thamDu);
       them(t.soNguoi, coDen ? String(soNguoi) : "0");
       them(t.khachCua, khachCua);
-      them(t.loiChuc, $("xn-loi-chuc").value.trim());
+      them(t.loiChuc, coDen ? $("xn-loi-chuc").value.trim() : "");
 
       nutGui.disabled = true;
       nutGui.textContent = "Đang gửi…";
@@ -167,7 +174,8 @@
       try { localStorage.removeItem(KHOA); } catch (loi) { /* bỏ qua */ }
       $("xn-xong").hidden = true;
       form.hidden = false;
-      $("xn-ten").focus();
+      var dangChon = form.querySelector('input[name="thamDu"]:checked') || form.querySelector('input[name="thamDu"]');
+      dangChon.focus();
     });
 
     // Khách đã xác nhận trên máy này thì lần sau mở lại thấy luôn lời cảm ơn

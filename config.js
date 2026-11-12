@@ -29,7 +29,7 @@ window.THIEP = {
 
   // 2) ĐỊA ĐIỂM
   diaDiem: {
-    thoiGian: "17h30 · Thứ Bảy · 02.01.2027",
+    thoiGian: "",   // dòng giờ ngày phía trên tên khách sạn (để "" thì không hiện)
     ten: "Khách sạn Meliá Hà Nội",
     sanh: "Hội trường Grand Ballroom – Tầng 2",
     diaChi: "44B Lý Thường Kiệt, Phường Cửa Nam, Hà Nội",

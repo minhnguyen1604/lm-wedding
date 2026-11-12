@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Ảnh xem trước khi chia sẻ link</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Pinyon+Script&family=Cinzel:wght@500&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #ddd; }
+  canvas { display: block; width: 100%; max-width: 1200px; }
+  p { font: 14px sans-serif; margin: 8px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<p id="tt">đang vẽ…</p>
+<script>
+(async function () {
+  const W = 1200, H = 630;
+  const c = document.getElementById("c"), ctx = c.getContext("2d");
+  const anh = (src) => new Promise((ok, loi) => { const i = new Image(); i.onload = () => ok(i); i.onerror = loi; i.src = src; });
+  await Promise.all([
+    document.fonts.load('80px "Pinyon Script"'),
+    document.fonts.load('600 26px "Cormorant Garamond"'),
+    document.fonts.load('italic 500 36px "Cormorant Garamond"'),
+    document.fonts.load('500 26px "Cinzel"'),
+  ]);
+  const [nen, logo, chuRe, coDau] = await Promise.all(
+    ["../images/nen.jpg", "../images/logo-lm.png", "../images/lego-chu-re.png", "../images/lego-co-dau.png"].map(anh));
+
+  // Nền kem + tranh hoa mờ ở hai bên
+  ctx.fillStyle = "#f7f2e7";
+  ctx.fillRect(0, 0, W, H);
+  const caoNen = 900, rongNen = nen.width * caoNen / nen.height;
+  ctx.globalAlpha = 0.55;
+  ctx.drawImage(nen, -60, -150, rongNen, caoNen);
+  ctx.save();
+  ctx.translate(W + 60, -150);
+  ctx.scale(-1, 1);                       // lật ngang cho bên phải
+  ctx.drawImage(nen, 0, 0, rongNen, caoNen);
+  ctx.restore();
+  ctx.globalAlpha = 1;
+  // quầng kem ở giữa cho chữ và hình nổi lên
+  const g = ctx.createRadialGradient(W / 2, H / 2, 120, W / 2, H / 2, 620);
+  g.addColorStop(0, "rgba(252,249,242,0.97)");
+  g.addColorStop(0.55, "rgba(252,249,242,0.9)");
+  g.addColorStop(1, "rgba(252,249,242,0.35)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  // viền vàng mảnh hai lớp
+  ctx.strokeStyle = "rgba(201,162,75,0.75)";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(22, 22, W - 44, H - 44);
+  ctx.strokeStyle = "rgba(201,162,75,0.4)";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(32, 32, W - 64, H - 64);
+
+  // Đôi lego bên trái, đứng trên một vạch vàng
+  const cao = 360, dayY = 492;
+  const rCR = chuRe.width * cao / chuRe.height, rCD = coDau.width * cao / coDau.height;
+  const giuaTrai = 345, tong = rCR + rCD;
+  ctx.save();
+  ctx.shadowColor = "rgba(60,55,35,0.22)";
+  ctx.shadowBlur = 14;
+  ctx.shadowOffsetY = 8;
+  ctx.drawImage(chuRe, giuaTrai - tong / 2, dayY - cao, rCR, cao);
+  ctx.drawImage(coDau, giuaTrai - tong / 2 + rCR, dayY - cao, rCD, cao);
+  ctx.restore();
+  const vach = ctx.createLinearGradient(giuaTrai - 230, 0, giuaTrai + 230, 0);
+  vach.addColorStop(0, "rgba(201,162,75,0)");
+  vach.addColorStop(0.3, "rgba(201,162,75,1)");
+  vach.addColorStop(0.7, "rgba(201,162,75,1)");
+  vach.addColorStop(1, "rgba(201,162,75,0)");
+  ctx.fillStyle = vach;
+  ctx.fillRect(giuaTrai - 230, dayY + 6, 460, 1.5);
+
+  // Chữ bên phải
+  const giuaPhai = 830;
+  const rongLogo = 150, caoLogo = logo.height * rongLogo / logo.width;
+  ctx.drawImage(logo, giuaPhai - rongLogo / 2, 92, rongLogo, caoLogo);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#9a7a2e";
+  ctx.font = '86px "Pinyon Script"';
+  ctx.fillText("Save the date", giuaPhai, 92 + caoLogo + 92);
+
+  // ngày, hai bên có vạch mảnh
+  const yNgay = 92 + caoLogo + 152;
+  ctx.font = '500 25px "Cinzel"';            // chữ số cao đều, không nhấp nhô
+  ctx.letterSpacing = "7px";
+  const chuNgay = "02 . 01 . 2027";
+  ctx.fillText(chuNgay, giuaPhai + 4, yNgay);
+  const rongNgay = ctx.measureText(chuNgay).width;
+  ctx.fillStyle = "#c9a24b";
+  ctx.fillRect(giuaPhai - rongNgay / 2 - 62, yNgay - 9, 44, 1.5);
+  ctx.fillRect(giuaPhai + rongNgay / 2 + 22, yNgay - 9, 44, 1.5);
+
+  ctx.letterSpacing = "0px";
+  ctx.fillStyle = "#4a5134";
+  ctx.font = 'italic 500 38px "Cormorant Garamond"';
+  ctx.fillText("Tuấn Minh & Tú Linh", giuaPhai, yNgay + 62);
+  ctx.font = '500 21px "Cormorant Garamond"';
+  ctx.letterSpacing = "4px";
+  ctx.fillStyle = "#7b8459";
+  ctx.fillText("KHÁCH SẠN MELIÁ HÀ NỘI", giuaPhai + 2, yNgay + 102);
+
+  // Lưu về máy
+  const blob = await new Promise((ok) => c.toBlob(ok, "image/jpeg", 0.88));
+  const r = await fetch("/luu?ten=og.jpg", { method: "POST", body: blob });
+  document.getElementById("tt").textContent = await r.text();
+  window.__xong = true;
+})().catch((e) => { document.getElementById("tt").textContent = "lỗi: " + e; window.__xong = true; });
+</script>
+</body>
+</html>

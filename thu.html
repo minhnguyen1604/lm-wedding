@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>L&amp;M Wedding Ceremony Invitation</title>
+  <meta name="description" content="Trân trọng kính mời Quý khách đến dự tiệc cưới của Tuấn Minh &amp; Tú Linh.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f6f1e6">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="L&amp;M Wedding Ceremony Invitation">
+  <meta property="og:description" content="Trân trọng kính mời Quý khách đến dự tiệc cưới của Tuấn Minh &amp; Tú Linh.">
+  <meta property="og:url" content="https://minhnguyen1604.github.io/lm-wedding/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Nền hoa mờ, đứng yên phía sau khi cuộn -->
+  <div class="nen" aria-hidden="true"></div>
+
+  <!-- Màn mở thiệp (chỉ hiện khi bật moThiep trong config.js) -->
+  <div class="bia" id="bia" hidden>
+    <div class="nen bia-nen" aria-hidden="true"></div>
+    <canvas class="bia-phao" id="bia-phao" aria-hidden="true"></canvas>
+    <div class="bia-trong">
+      <div class="bia-vom">
+        <img class="bia-logo" id="bia-logo" alt="L &amp; M" width="688" height="580">
+        <h1 class="bia-ten" id="bia-ten"></h1>
+        <p class="bia-ngay" id="bia-ngay"></p>
+        <div class="bia-san">
+          <div class="doi bia-doi" id="bia-doi" aria-hidden="true"></div>
+        </div>
+        <button class="bia-nut" id="bia-nut" type="button">Mở thiệp</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="trang">
+
+    <header class="mo-dau">
+      <img class="logo" id="logo" alt="L &amp; M" width="688" height="580" hidden>
+      <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+        <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+        <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+        <circle cx="50" cy="6" r="1" fill="currentColor"/>
+        <circle cx="70" cy="6" r="1" fill="currentColor"/>
+      </svg>
+    </header>
+
+    <!-- 1. Các khung thiệp -->
+    <section class="phan" id="thiep" aria-label="Thông tin đám cưới">
+      <div class="ds-khung" id="ds-khung"></div>
+    </section>
+
+    <!-- 2. Xác nhận tham dự (chỉ hiện khi đã khai báo Google Form trong config.js) -->
+    <section class="phan" id="xac-nhan" hidden>
+      <div class="tieu-de cuon">
+        <p class="chu-nho">Rất mong được đón tiếp</p>
+        <h2>Xác nhận tham dự</h2>
+        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          <circle cx="50" cy="6" r="1" fill="currentColor"/>
+          <circle cx="70" cy="6" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="the cuon">
+        <form id="xn-form" novalidate>
+          <p class="xn-han" id="xn-han"></p>
+
+          <!-- Bước 1: chọn có / không -->
+          <fieldset class="xn-nhom xn-buoc-1">
+            <legend class="xn-nhan">Quý khách sẽ tham dự chứ?</legend>
+            <div class="xn-chon">
+              <label><input type="radio" name="thamDu" value="Sẽ tham dự"><span>Sẽ tham dự</span></label>
+              <label><input type="radio" name="thamDu" value="Không thể tham dự"><span>Rất tiếc, không thể tham dự</span></label>
+            </div>
+          </fieldset>
+
+          <!-- Bước 2: chỉ hiện sau khi đã chọn -->
+          <div class="xn-buoc-2" id="xn-buoc-2" hidden>
+            <label class="xn-nhan" for="xn-ten">Họ và tên</label>
+            <input class="xn-o" id="xn-ten" name="ten" type="text" autocomplete="name" maxlength="80">
+
+            <div class="xn-chi-khi-co" id="xn-chi-khi-co">
+              <fieldset class="xn-nhom">
+                <legend class="xn-nhan">Số người tham dự</legend>
+                <div class="xn-dem">
+                  <button type="button" id="xn-tru" aria-label="Bớt một người">&minus;</button>
+                  <output id="xn-so" aria-live="polite">1</output>
+                  <button type="button" id="xn-cong" aria-label="Thêm một người">+</button>
+                </div>
+              </fieldset>
+
+              <fieldset class="xn-nhom">
+                <legend class="xn-nhan">Khách mời của</legend>
+                <div class="xn-chon hai-cot">
+                  <label><input type="radio" name="khachCua" value="Nhà trai"><span>Nhà trai</span></label>
+                  <label><input type="radio" name="khachCua" value="Nhà gái"><span>Nhà gái</span></label>
+                </div>
+              </fieldset>
+
+              <label class="xn-nhan" for="xn-loi-chuc">Lời chúc <i>(không bắt buộc)</i></label>
+              <textarea class="xn-o" id="xn-loi-chuc" name="loiChuc" rows="3" maxlength="500"></textarea>
+            </div>
+
+            <!-- Ô bẫy cho máy gửi tự động; người thật không thấy ô này -->
+            <input class="xn-bay" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <p class="xn-loi" id="xn-loi" role="alert" hidden></p>
+            <button class="nut" type="submit" id="xn-gui">Gửi xác nhận</button>
+          </div>
+        </form>
+
+        <div id="xn-xong" hidden>
+          <p class="xn-cam-on" id="xn-cam-on" tabindex="-1"></p>
+          <button type="button" class="xn-sua" id="xn-sua">Gửi lại xác nhận khác</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Album ảnh cưới (cuộn ngang) -->
+    <section class="phan" id="album">
+      <div class="tieu-de cuon">
+        <p class="chu-nho">Những khoảnh khắc hạnh phúc</p>
+        <h2>Album ảnh cưới</h2>
+        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          <circle cx="50" cy="6" r="1" fill="currentColor"/>
+          <circle cx="70" cy="6" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="dai-anh" id="dai-anh" tabindex="0" role="group" aria-label="Album ảnh cưới, vuốt ngang để xem"></div>
+      <div class="dai-dk" id="dai-dk">
+        <button type="button" id="da-truoc" aria-label="Ảnh trước">&lsaquo;</button>
+        <span id="da-dem" aria-live="off"></span>
+        <button type="button" id="da-sau" aria-label="Ảnh sau">&rsaquo;</button>
+      </div>
+    </section>
+
+    <!-- 4. Địa điểm -->
+    <section class="phan" id="dia-diem">
+      <div class="tieu-de cuon">
+        <p class="chu-nho">Trân trọng đón tiếp tại</p>
+        <h2>Địa điểm tổ chức</h2>
+        <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+          <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          <circle cx="50" cy="6" r="1" fill="currentColor"/>
+          <circle cx="70" cy="6" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="the cuon">
+        <p class="chu-nho dd-thoi-gian" id="dd-thoi-gian"></p>
+        <p class="dd-ten" id="dd-ten"></p>
+        <p class="dd-sanh" id="dd-sanh"></p>
+        <p class="dd-dia-chi" id="dd-dia-chi"></p>
+        <div class="ban-do">
+          <iframe id="dd-map" title="Bản đồ nơi tổ chức" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+        <a class="nut" id="dd-chi-duong" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 12 3.5 6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          Chỉ đường
+        </a>
+      </div>
+    </section>
+
+    <footer class="ket cuon">
+      <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+        <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
+        <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
+        <circle cx="50" cy="6" r="1" fill="currentColor"/>
+        <circle cx="70" cy="6" r="1" fill="currentColor"/>
+      </svg>
+      <div class="doi doi-nhay" id="doi-cuoi" aria-hidden="true" hidden></div>
+      <p id="loi-ket"></p>
+    </footer>
+  </main>
+
+  <!-- Đĩa nhạc: chạm để tắt / bật nhạc -->
+  <button class="dia" id="dia" type="button" aria-label="Bật nhạc" aria-pressed="false" hidden>
+    <svg viewBox="0 0 60 60" aria-hidden="true">
+      <g class="dia-quay">
+        <circle cx="30" cy="30" r="29" fill="#2c2f24"/>
+        <g fill="none" stroke="#fffdf8" stroke-opacity=".14" stroke-width=".7">
+          <circle cx="30" cy="30" r="25"/><circle cx="30" cy="30" r="21.5"/><circle cx="30" cy="30" r="18"/><circle cx="30" cy="30" r="14.5"/>
+        </g>
+        <!-- vệt sáng để thấy rõ đĩa đang quay -->
+        <path d="M30 3a27 27 0 0 1 19 8" fill="none" stroke="#fffdf8" stroke-opacity=".35" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M30 57a27 27 0 0 1-19-8" fill="none" stroke="#fffdf8" stroke-opacity=".22" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="30" cy="30" r="10.5" fill="#c9a24b"/>
+        <text x="30" y="27.4" text-anchor="middle" font-size="5.4" font-weight="600" fill="#2c2f24" letter-spacing=".3">L&amp;M</text>
+        <circle cx="30" cy="30" r="1.7" fill="#f7f2e7"/>
+      </g>
+      <path class="dia-gach" d="M9 51 51 9" stroke="#f7f2e7" stroke-width="3.2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- Khung xem ảnh phóng to -->
+  <div class="xem-anh" id="xem-anh" role="dialog" aria-modal="true" aria-label="Xem ảnh" hidden>
+    <button class="xa-nut xa-dong" id="xa-dong" aria-label="Đóng">&times;</button>
+    <button class="xa-nut xa-truoc" id="xa-truoc" aria-label="Ảnh trước">&lsaquo;</button>
+    <img id="xa-img" alt="">
+    <button class="xa-nut xa-sau" id="xa-sau" aria-label="Ảnh sau">&rsaquo;</button>
+    <p class="xa-dem" id="xa-dem"></p>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    // Chỉ dùng cho trang thử trên máy
+    THIEP.xacNhan.hanChot = "Xin vui lòng xác nhận trước ngày 20.12.2026";
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

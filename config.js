@@ -45,8 +45,12 @@ window.THIEP = {
   //    Chép ảnh vào thư mục images/gallery/ rồi liệt kê tên file ở đây.
   //    Để trống [] thì mục album tự ẩn.
   gallery: [
-    // "images/gallery/01.jpg",
-    // "images/gallery/02.jpg",
+    "images/gallery/01.jpg",
+    "images/gallery/02.jpg",
+    "images/gallery/03.jpg",
+    "images/gallery/04.jpg",
+    "images/gallery/05.jpg",
+    "images/gallery/06.jpg",
   ],
 
   // Dòng chữ cuối trang

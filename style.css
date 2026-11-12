@@ -418,7 +418,7 @@ textarea.xn-o {
 }
 .o-anh {
   flex: 0 0 100%;          /* 100% phần giữa hai lề 12% = 76% bề ngang trang */
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 2 / 3;     /* đúng tỉ lệ ảnh cưới (dọc 2:3) nên ảnh không bị cắt */
   margin: 0;
   padding: 6px;
   scroll-snap-align: center;

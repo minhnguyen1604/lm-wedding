@@ -7,6 +7,8 @@ __pycache__/
 # ảnh dùng cho trang nằm trong images/
 /*.jpg
 /*.jpeg
+# Ảnh cưới gốc (nặng, còn thông tin máy ảnh); bản đã thu nhỏ nằm trong images/gallery/
+/anhcuoi/
 # Trang thử trên máy (ảnh giả + form giả lập), không đưa lên
 /thu.html
 /_thu/

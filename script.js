@@ -677,6 +677,16 @@
     // Có ảnh lego thật thì dùng ảnh; không thì dùng hình vẽ
     var datDoi = function (o) {
       var h = mt.hinh || {};
+      if (h.doi) {                                 // một ảnh chung cho cả đôi
+        o.classList.add("doi-anh", "doi-chung");
+        var mot = new Image();
+        mot.className = "bup-be doi-mot";
+        mot.alt = "";
+        mot.draggable = false;
+        mot.src = h.doi;
+        o.appendChild(mot);
+        return;
+      }
       if (!h.chuRe || !h.coDau) { o.innerHTML = CHU_RE + CO_DAU; return; }
       o.classList.add("doi-anh");
       [["chu-re", h.chuRe], ["co-dau", h.coDau]].forEach(function (c) {

@@ -10,8 +10,8 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
 ## Thiệp đang có gì (theo thứ tự trên trang)
 
 1. **Màn mở thiệp**: logo LM, "Save the date" (phông Pinyon Script), ngày 02.01.2027, đôi lego và nút "Mở thiệp".
-   Chạm vào thì hai hình lego bước lại gần nhau, pháo hoa nổ, nhạc Canon in D bắt đầu.
-   Màn này luôn tự đóng sau ~5 giây kể cả khi máy tạm dừng hoạt ảnh.
+   Chạm vào thì đôi lego nhún nhảy, pháo hoa rực rỡ nổ (tên lửa, 11 chùm nhiều màu, kim tuyến, ba chùm kết),
+   nhạc Canon in D bắt đầu. Màn này luôn tự đóng sau ~6 giây kể cả khi máy tạm dừng hoạt ảnh.
 2. **Hai mặt thiệp** cắt từ bản duyệt in: mặt lời mời (có chữ "QUÝ KHÁCH" in hoa đậm trên dòng chấm)
    và mặt chương trình tiệc cưới (đã bỏ mã QR). Chạm vào để phóng to.
 3. **Xác nhận tham dự**: chọn "Sẽ tham dự" thì hiện họ tên, số người, khách nhà trai/gái, lời chúc;
@@ -35,7 +35,8 @@ Tải trang: lúc mới mở link chỉ ~0,9 MB; nhạc tải khi bấm "Mở th
 | `images/logo-lm.png` | Logo LM (nền trong suốt) |
 | `images/thiep/` | `1.jpg` mặt lời mời, `2.jpg` mặt chương trình tiệc — tạo bằng `cong-cu/cat_thiep.py` |
 | `images/gallery/` | Ảnh album đã thu nhỏ — tạo bằng `cong-cu/thu_nho_anh_cuoi.py` |
-| `images/lego-*.png` | Đôi lego đã tách nền — tạo bằng `cong-cu/tach_lego.py` |
+| `images/lego-doi.png` | **Đôi lego đang dùng** (một ảnh chung, nét vẽ màu nước) — tách từ `nguon/lego-moi-goc.jpg` bằng `cong-cu/tach_lego_moi.py` |
+| `images/lego-chu-re.png`, `lego-co-dau.png` | Đôi lego cũ (ảnh chụp, hai ảnh riêng) — tạo bằng `cong-cu/tach_lego.py`; đổi lại trong `config.js` nếu muốn |
 | `audio/canon-in-d.mp3` | Nhạc nền — tạo bằng `cong-cu/tao_nhac.py` |
 | `nguon/` | **Ảnh gốc**: bản duyệt in mới (`ban-duyet-in.jpeg`) và cũ, logo gốc, ảnh lego gốc, ảnh cưới gốc (`anh-cuoi/`) |
 | `cong-cu/` | Script Python để tạo lại ảnh, nhạc từ ảnh gốc |
@@ -61,7 +62,7 @@ Mở http://localhost:8123 để xem thử. Cần đẩy code lên thì máy đ�
 Chỉ khi cần chạy các script trong `cong-cu/`:
 
 ```bash
-pip install pillow numpy "qrcode[pil]" lameenc
+pip install pillow numpy "qrcode[pil]" lameenc opencv-python-headless
 ```
 
 ## Cập nhật thiệp
@@ -83,7 +84,8 @@ Khoảng 1–2 phút sau link công khai đổi theo. Máy nào còn hiện bả
 |---|---|
 | `cat_thiep.py [ảnh duyệt in]` | Cắt 2 mặt thiệp từ `nguon/ban-duyet-in.jpeg`, viết "QUÝ KHÁCH", bỏ QR ở mặt chương trình, **kiểm tra QR in trên thiệp khớp link**. Dùng phông Palatino đậm có sẵn trên Windows. Khi nhà in gửi bản duyệt mới (cùng bố cục): chép vào `nguon/ban-duyet-in.jpeg` rồi chạy lại. |
 | `thu_nho_anh_cuoi.py [thư mục]` | Thu nhỏ ảnh cưới gốc còn cạnh dài 1600 px, bỏ EXIF, ghi `images/gallery/01.jpg…`. Thứ tự sửa trong danh sách `THU_TU`. Nhớ cập nhật `gallery` trong `config.js`. |
-| `tach_lego.py` | Tách đôi lego khỏi nền ảnh `nguon/lego-goc.png` (toạ độ xoá nét thừa chỉnh tay cho ảnh này). |
+| `tach_lego_moi.py` | Tách đôi lego đang dùng khỏi nền tranh `nguon/lego-moi-goc.jpg` bằng GrabCut (cần `opencv-python-headless`); đường bao thô vẽ tay cho riêng ảnh này. |
+| `tach_lego.py` | Tách đôi lego cũ khỏi nền ảnh `nguon/lego-goc.png` (toạ độ xoá nét thừa chỉnh tay cho ảnh này). |
 | `tao_nhac.py` | Tổng hợp bản Canon in D kiểu hộp nhạc, ghi `audio/canon-in-d.mp3`. Muốn dùng bản thu thật thì thay file mp3 và giữ tên. |
 | `tao_trang_thu.py` | Tạo `thu.html` để xem thử thiệp với cài đặt khác mà không đụng bản thật. |
 
@@ -108,7 +110,8 @@ xuất bản cho "Bất kỳ ai có đường liên kết"; lấy mã `entry.` q
 - Hoa rum rơi sau khi mở thiệp — bỏ vì không đẹp.
 - Nút "Thêm vào lịch" (Google Calendar / iPhone) — bỏ.
 - Ảnh xem trước riêng khi gửi link qua Zalo/Messenger — bỏ, chỉ gửi link trần.
-- Đôi búp bê / lego tự vẽ bằng SVG — bỏ, dùng ảnh lego gốc (code vẽ vẫn còn trong `script.js` làm phương án dự phòng).
+- Đôi búp bê / lego tự vẽ bằng SVG — bỏ, dùng ảnh lego (code vẽ vẫn còn trong `script.js` làm phương án dự phòng).
+- Đôi lego ảnh chụp (hai ảnh riêng, bước lại gần nhau) — thay bằng đôi lego nét vẽ màu nước hợp tông thiệp hơn.
 - Khung vòm ở màn mở thiệp — bỏ.
 - Nút "Xác nhận tham dự" riêng phía dưới thiệp — bỏ, chỉ giữ một mục xác nhận.
 

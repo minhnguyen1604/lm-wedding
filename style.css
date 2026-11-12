@@ -551,6 +551,9 @@ textarea.xn-o {
 /* Ảnh không co duỗi tay chân được nên bước đi bằng cách lắc lư nhè nhẹ */
 .doi-anh.dang-di .chu-re { animation: lac-lu 0.34s ease-in-out infinite alternate; }
 .doi-anh.dang-di .co-dau { animation: lac-lu 0.34s ease-in-out infinite alternate-reverse; }
+/* Một ảnh chung cho cả đôi: cao hơn vì gồm hai người, lúc "bước đi" thì nhún nhảy nhẹ cả đôi */
+.doi-chung .doi-mot { height: calc(var(--bb-rong) * 1.95); }
+.doi-anh.dang-di .doi-mot { animation: lac-lu 0.34s ease-in-out infinite alternate; }
 @keyframes lac-lu {
   from { transform: rotate(-3.5deg) translateY(0); }
   50% { transform: rotate(0deg) translateY(-3px); }

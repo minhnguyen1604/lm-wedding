@@ -13,8 +13,11 @@ window.THIEP = {
     bat: true,
     ten: "Save the date",   // dòng chữ dưới logo trên màn mở thiệp
     ngay: "02 . 01 . 2027",
-    // Ảnh hai hình lego (nền trong suốt). Để "" thì dùng hình vẽ sẵn.
-    hinh: { chuRe: "images/lego-chu-re.png", coDau: "images/lego-co-dau.png" },
+    // Ảnh đôi lego (nền trong suốt).
+    //  - doi: một ảnh chung cho cả đôi (đang dùng, tách từ tranh nguon/lego-moi-goc.jpg)
+    //  - hoặc bỏ doi và dùng chuRe + coDau (đôi cũ, hai ảnh riêng, có hiệu ứng bước lại gần nhau):
+    //    hinh: { chuRe: "images/lego-chu-re.png", coDau: "images/lego-co-dau.png" },
+    hinh: { doi: "images/lego-doi.png" },
     // File nhạc, ví dụ "audio/canon-in-d.mp3". Để "" thì không có nhạc và không có đĩa nhạc.
     nhac: "audio/canon-in-d.mp3",
   },

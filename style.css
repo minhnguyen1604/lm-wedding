@@ -221,6 +221,19 @@ body {
 
 .nut[hidden] { display: none; }
 
+/* Chữ chỉ dành cho trình đọc màn hình, không hiện trên trang */
+.chi-doc {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- 2. Xác nhận tham dự ---------- */
 .xn-han {
   margin: 0 0 4px;

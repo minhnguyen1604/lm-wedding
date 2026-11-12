@@ -202,14 +202,14 @@
       o.className = "o-anh";
       o.setAttribute("aria-label", "Xem to ảnh " + (i + 1));
       var img = document.createElement("img");
-      img.loading = "lazy";
       img.alt = "Ảnh cưới " + (i + 1);
       img.draggable = false;
+      img.decoding = "async";
       img.onerror = function () { o.remove(); capNhat(); };
-      img.src = src;
+      img.dataset.src = src;    // chưa tải; chỉ tải khi khách cuộn gần tới album
       o.appendChild(img);
       o.addEventListener("click", function () {
-        var ds = dsO().map(function (x) { return x.firstChild.src; });
+        var ds = dsO().map(function (x) { return x.firstChild.dataset.src; });
         dung();
         moAnh(ds, dsO().indexOf(o), o);
       });
@@ -217,6 +217,23 @@
     });
     theoDoi(dai);
     theoDoi($("dai-dk"));
+
+    // Tải ảnh album khi khách cuộn gần tới (còn cách ~nửa màn hình),
+    // và chỉ bắt đầu canh sau khi khách đã mở thiệp
+    var taiAlbum = function () {
+      Array.prototype.forEach.call(dai.querySelectorAll("img[data-src]"), function (img) {
+        if (!img.getAttribute("src")) img.src = img.dataset.src;
+      });
+    };
+    var canhAlbum = function () {
+      if (!("IntersectionObserver" in window)) { taiAlbum(); return; }
+      var canhGac = new IntersectionObserver(function (ds) {
+        if (ds[0].isIntersecting) { taiAlbum(); canhGac.disconnect(); }
+      }, { rootMargin: "400px 0px" });
+      canhGac.observe($("album"));
+    };
+    if (C.moThiep && C.moThiep.bat) document.addEventListener("thiep-da-mo", canhAlbum, { once: true });
+    else canhAlbum();
 
     // Ảnh ở giữa rõ và to nhất; càng xa giữa càng nhỏ và mờ
     var capNhat = function () {
@@ -430,6 +447,12 @@
   }
   function phatNhac() {
     if (!nhac) return;
+    // Chỉ tải file nhạc ở lần phát đầu tiên (khi khách bấm "Mở thiệp" hoặc đĩa nhạc)
+    if (!nhac.dataset.daTai) {
+      nhac.dataset.daTai = "1";
+      nhac.preload = "auto";
+      nhac.src = mt.nhac;
+    }
     var p = nhac.play();
     if (p && p.catch) p.catch(function () { /* trình duyệt chặn thì khách tự bấm đĩa */ });
   }
@@ -438,8 +461,7 @@
     nhac = new Audio();
     nhac.loop = true;
     nhac.volume = 0.7;
-    nhac.preload = "auto";
-    nhac.src = mt.nhac;
+    nhac.preload = "none";      // chưa tải gì cho tới khi khách bấm
     nhac.addEventListener("play", function () { datTrangThaiNhac(true); });
     nhac.addEventListener("pause", function () { datTrangThaiNhac(false); });
     dia.hidden = false;
@@ -519,6 +541,46 @@
     requestAnimationFrame(khung);
   }
 
+  /* ---------- Chạm vào đôi lego cuối thiệp: bắn một chùm tim ---------- */
+  var TIM = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+  var MAU_TIM = ["#e2578f", "#f29bb5", "#d98c98", "#c9a24b", "#efc2c9"];
+  function banTim(doi) {
+    var ket = doi.parentNode;
+    var hopDoi = doi.getBoundingClientRect(), hopKet = ket.getBoundingClientRect();
+    var cx = hopDoi.left - hopKet.left + hopDoi.width / 2;
+    var cy = hopDoi.top - hopKet.top + hopDoi.height * 0.35;
+    // hai nhân vật nhún nhẹ một cái
+    Array.prototype.forEach.call(doi.querySelectorAll(".bup-be"), function (b, i) {
+      if (b.animate) b.animate(
+        [{ transform: "translateY(0)" }, { transform: "translateY(-12px)" }, { transform: "translateY(0)" }],
+        { duration: 420, delay: i * 70, easing: "ease-out" }
+      );
+    });
+    if (giamChuyenDong) return;
+    for (var i = 0; i < 16; i++) {
+      var t = document.createElement("span");
+      t.className = "tim";
+      t.innerHTML = TIM;
+      var co = 12 + Math.random() * 14;
+      t.style.width = t.style.height = co + "px";
+      t.style.left = (cx - co / 2) + "px";
+      t.style.top = (cy - co / 2) + "px";
+      t.style.color = MAU_TIM[i % MAU_TIM.length];
+      ket.appendChild(t);
+      var goc = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;     // bay lên, toả ra hai bên
+      var xa = 70 + Math.random() * 90;
+      var dx = Math.cos(goc) * xa, dy = Math.sin(goc) * xa;
+      var quay = (Math.random() - 0.5) * 60;
+      if (!t.animate) { t.remove(); continue; }
+      t.animate([
+        { transform: "translate(0, 0) scale(.3) rotate(0deg)", opacity: 0 },
+        { transform: "translate(" + dx * 0.55 + "px, " + dy * 0.55 + "px) scale(1) rotate(" + quay / 2 + "deg)", opacity: 1, offset: 0.35 },
+        { transform: "translate(" + dx + "px, " + (dy - 30) + "px) scale(.85) rotate(" + quay + "deg)", opacity: 0 }
+      ], { duration: 1300 + Math.random() * 500, delay: Math.random() * 120, easing: "cubic-bezier(.2,.7,.3,1)", fill: "forwards" })
+        .onfinish = (function (el) { return function () { el.remove(); }; })(t);
+    }
+  }
+
   /* ---------- Màn mở thiệp ---------- */
   if (mt.bat) {
     var bia = $("bia"), biaDoi = $("bia-doi"), biaNut = $("bia-nut");
@@ -548,6 +610,7 @@
     datDoi($("doi-cuoi"));
     $("doi-cuoi").classList.add("nam-tay");
     $("doi-cuoi").hidden = false;
+    $("doi-cuoi").addEventListener("click", function () { banTim($("doi-cuoi")); });
 
     var daMo = false, daXong = false;
     var dongBia = function () {
@@ -556,6 +619,7 @@
       bia.classList.add("dang-dong");
       document.body.classList.remove("khoa-cuon");
       setTimeout(function () { bia.hidden = true; }, 1000);
+      document.dispatchEvent(new Event("thiep-da-mo"));
     };
     var moThiep = function () {
       if (daMo) { dongBia(); return; }            // chạm lần nữa thì bỏ qua phần diễn

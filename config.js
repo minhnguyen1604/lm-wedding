@@ -24,7 +24,7 @@ window.THIEP = {
   //    Ảnh nào chưa có thì trang tự hiện khung trống.
   thiep: [
     "images/thiep/1.jpg",   // lời mời (mặt sau thiệp giấy)
-    "images/thiep/2.jpg",   // timeline (mặt trước thiệp giấy, đã bỏ mã QR và lề trống)
+    "images/thiep/2.jpg",   // chương trình tiệc cưới (mặt trước thiệp giấy, đã bỏ mã QR và lề trống)
   ],
 
   // 2) ĐỊA ĐIỂM

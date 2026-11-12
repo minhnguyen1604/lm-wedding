@@ -41,14 +41,15 @@ window.THIEP = {
   //    Để formUrl là "" thì mục này (và nút "Xác nhận tham dự") tự ẩn.
   xacNhan: {
     // Địa chỉ nhận của Google Form, dạng: https://docs.google.com/forms/d/e/XXXX/formResponse
-    formUrl: "",
+    //  (form "Xác nhận tham dự – L&M Wedding", ghi vào Sheet L&M-Wedding-Online-Invitation)
+    formUrl: "https://docs.google.com/forms/d/e/1FAIpQLScjHbgs71DLRVwwoFU0RZB_8lUm01SA0lPY3QVrq1eENSWCHA/formResponse",
     // Mã của từng câu hỏi trong Google Form (dạng "entry.123456789")
     truong: {
-      ten: "",
-      thamDu: "",
-      soNguoi: "",
-      khachCua: "",
-      loiChuc: "",
+      ten: "entry.250352820",
+      thamDu: "entry.1277341022",
+      soNguoi: "entry.544979033",
+      khachCua: "entry.499174629",
+      loiChuc: "entry.1823210447",
     },
     // Dòng nhắc hạn chót, ví dụ "Xin vui lòng xác nhận trước ngày 20.12.2026" (để "" nếu không cần)
     hanChot: "",

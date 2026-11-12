@@ -421,6 +421,8 @@ textarea.xn-o {
   background: var(--kem);
   user-select: none;
 }
+/* Ảnh chưa tải thì để trống màu kem, không hiện biểu tượng ảnh hỏng */
+.o-anh img:not([src]) { visibility: hidden; }
 
 /* Nút lùi / tiến và số đếm dưới dải ảnh */
 .dai-dk {

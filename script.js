@@ -102,8 +102,21 @@
     };
     var hienCamOn = function (coDen) {
       $("xn-cam-on").textContent = coDen
-        ? "Xin cảm ơn! Đã ghi nhận xác nhận tham dự. Rất mong được đón tiếp trong ngày vui."
+        ? "Xin cảm ơn Quý khách đã xác nhận tham dự! Rất mong được đón tiếp Quý khách trong ngày vui của gia đình chúng tôi."
         : "Xin cảm ơn đã báo tin. Rất tiếc vì không được đón tiếp trong ngày vui này.";
+      // Nhân vật lego đáp lại (một hoặc nhiều ảnh đứng cạnh nhau)
+      var anhDap = coDen ? xn.hinhCo : xn.hinhKhong;
+      var ds = [].concat(anhDap || []);
+      var khung = $("xn-hinh");
+      khung.innerHTML = "";
+      ds.forEach(function (src) {
+        var img = new Image();
+        img.alt = "";
+        img.draggable = false;
+        img.src = src;
+        khung.appendChild(img);
+      });
+      khung.hidden = !ds.length;
       form.hidden = true;
       $("xn-xong").hidden = false;
     };
@@ -675,8 +688,8 @@
     $("bia-ten").textContent = mt.ten || "";
     $("bia-ngay").textContent = mt.ngay || "";
     // Có ảnh lego thật thì dùng ảnh; không thì dùng hình vẽ
-    var datDoi = function (o) {
-      var h = mt.hinh || {};
+    var datDoi = function (o, h) {
+      h = h || {};
       if (h.doi) {                                 // một ảnh chung cho cả đôi
         o.classList.add("doi-anh", "doi-chung");
         var mot = new Image();
@@ -698,12 +711,14 @@
         o.appendChild(img);
       });
     };
-    datDoi(biaDoi);
+    // Màn mở thiệp dùng hinhMo (nếu có), cuối thiệp dùng hinh
+    datDoi(biaDoi, mt.hinhMo || mt.hinh);
+    if (mt.hinhMo && mt.hinhMo.chuRe) biaDoi.classList.add("cau-hon");
     bia.hidden = false;
     document.body.classList.add("khoa-cuon");
 
     // Đôi búp bê nắm tay ở cuối thiệp, đung đưa theo nhạc
-    datDoi($("doi-cuoi"));
+    datDoi($("doi-cuoi"), mt.hinh);
     $("doi-cuoi").classList.add("nam-tay");
     $("doi-cuoi").hidden = false;
     $("doi-cuoi").addEventListener("click", function () { banTim($("doi-cuoi")); });

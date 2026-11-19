@@ -17,7 +17,11 @@ window.THIEP = {
     //  - doi: một ảnh chung cho cả đôi (đang dùng, tách từ tranh nguon/lego-moi-goc.jpg)
     //  - hoặc bỏ doi và dùng chuRe + coDau (đôi cũ, hai ảnh riêng, có hiệu ứng bước lại gần nhau):
     //    hinh: { chuRe: "images/lego-chu-re.png", coDau: "images/lego-co-dau.png" },
-    hinh: { doi: "images/lego-doi.png" },
+    hinh: { doi: "images/lego/doi-toc-den-toc.png" },
+    // Màn mở thiệp: để null thì dùng `hinh` như trên.
+    // Cảnh cầu hôn (chú rể đội mũ cầm nhẫn bước tới cô dâu) nếu muốn dùng lại:
+    //   hinhMo: { chuRe: "images/lego/chu-re-nhan.png", coDau: "images/lego/co-dau-hoa.png" },
+    hinhMo: null,
     // File nhạc, ví dụ "audio/canon-in-d.mp3". Để "" thì không có nhạc và không có đĩa nhạc.
     nhac: "audio/canon-in-d.mp3",
   },
@@ -56,6 +60,9 @@ window.THIEP = {
     },
     // Dòng nhắc hạn chót, ví dụ "Xin vui lòng xác nhận trước ngày 20.12.2026" (để "" nếu không cần)
     hanChot: "",
+    // Nhân vật lego hiện cùng lời cảm ơn sau khi gửi: một ảnh hoặc danh sách ảnh đứng cạnh nhau ("" nếu không cần)
+    hinhCo: "images/lego/doi-toc-den-toc.png",    // khách sẽ tham dự: cô dâu và chú rể (để tóc) đứng cạnh nhau
+    hinhKhong: "images/lego/doi-toc-den-toc.png", // khách báo vắng: cũng là đôi để tóc
   },
 
   // 4) ALBUM ẢNH CƯỚI (cuộn ngang)
@@ -70,6 +77,6 @@ window.THIEP = {
     "images/gallery/06.jpg",
   ],
 
-  // Dòng chữ cuối trang
-  loiKet: "Sự hiện diện của Quý khách là niềm vinh hạnh của gia đình chúng tôi.",
+  // Dòng chữ cuối trang (để "" thì không hiện)
+  loiKet: "",
 };

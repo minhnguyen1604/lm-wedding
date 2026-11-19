@@ -103,7 +103,7 @@
     var hienCamOn = function (coDen) {
       $("xn-cam-on").textContent = coDen
         ? "Xin cảm ơn Quý khách đã xác nhận tham dự! Rất mong được đón tiếp Quý khách trong ngày vui của gia đình chúng tôi."
-        : "Xin cảm ơn đã báo tin. Rất tiếc vì không được đón tiếp trong ngày vui này.";
+        : "Xin chân thành cảm ơn Quý khách đã báo tin. Gia đình chúng tôi rất tiếc vì không được đón tiếp Quý khách trong ngày vui, và xin gửi lời chúc sức khoẻ, bình an đến Quý khách cùng gia đình.";
       // Nhân vật lego đáp lại (một hoặc nhiều ảnh đứng cạnh nhau)
       var anhDap = coDen ? xn.hinhCo : xn.hinhKhong;
       var ds = [].concat(anhDap || []);

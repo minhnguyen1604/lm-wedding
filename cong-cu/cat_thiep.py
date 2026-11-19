@@ -1,6 +1,7 @@
 """Cắt hai mặt thiệp từ bản duyệt in và ghi vào images/thiep/.
 
-- images/thiep/1.jpg: mặt lời mời, có viết "QUÝ KHÁCH" (in hoa, đậm nghiêng) lên dòng chấm
+- images/thiep/1.jpg: mặt lời mời, có viết "QUÝ KHÁCH" (in hoa, đậm nghiêng) lên dòng chấm,
+  và đảo thứ tự tên: "TÚ LINH" trước, "TUẤN MINH" sau (DAO_TEN)
 - images/thiep/2.jpg: mặt chương trình tiệc cưới, đã bỏ mã QR và lề trống
 Đồng thời kiểm tra mã QR in trên thiệp có trỏ đúng link thiệp không.
 
@@ -50,7 +51,58 @@ for x0, x1 in doan:
     mat.append(ban_in.crop((x0 + 3, int(dai[0]) + 3, x1 - 3, int(dai[-1]) + 1 - 3)))
 mat_truoc, mat_sau = mat          # trái: chương trình tiệc, phải: lời mời
 
-# 2. Mặt lời mời: viết "QUÝ KHÁCH" lên dòng chấm dưới "TRÂN TRỌNG KÍNH MỜI"
+# 2a. Mặt lời mời: đảo thứ tự tên — "TÚ LINH" lên dòng trên, "TUẤN MINH" xuống dòng dưới
+#     (giữ nguyên phông, màu, cỡ chữ và kiểu dòng dưới thụt vào của bản in). Đặt DAO_TEN = False để giữ như bản in.
+DAO_TEN = True
+# vùng chứa từng dòng tên trên mặt lời mời (toạ độ điểm ảnh của mặt thiệp đã cắt, gồm cả dấu)
+DONG_TREN = (118, 440, 670, 553)    # "TUẤN MINH" trên bản in
+DONG_DUOI = (150, 556, 560, 656)    # "TÚ LINH" trên bản in
+MAU_TEN = np.array([172, 137, 79])  # vàng của chữ tên
+
+
+def dao_ten(mat):
+    import cv2
+    a = np.asarray(mat).astype(float)
+    lum = a @ [.299, .587, .114]
+    sat = a[..., 0] - a[..., 2]
+    # lõi nét chữ: đậm hơn hẳn nét hoa rum và nét uốn phía sau (ảnh JPEG làm nhạt màu nét mảnh nên xét độ sáng là chính)
+    loi = (lum < 212) & (sat > 8)
+    vung = np.zeros(lum.shape, bool)
+    dong = []
+    for x0, y0, x1, y1 in (DONG_TREN, DONG_DUOI):
+        m = np.zeros(lum.shape, np.uint8)
+        m[y0:y1, x0:x1] = loi[y0:y1, x0:x1]
+        n, nhan, tk, _ = cv2.connectedComponentsWithStats(m, 8)
+        for i in range(1, n):                 # bỏ chấm lẻ không thuộc chữ
+            if tk[i, cv2.CC_STAT_AREA] < 12:
+                m[nhan == i] = 0
+        m = cv2.dilate(m, np.ones((3, 3), np.uint8), iterations=2) > 0
+        ys, xs = np.nonzero(m)
+        dong.append((m, xs.min(), ys.max()))
+        vung |= m
+    # xoá chữ cũ, vẽ bù nền (hoa rum, nét uốn) bằng inpaint
+    bgr = cv2.cvtColor(a.astype(np.uint8), cv2.COLOR_RGB2BGR)
+    xoa = cv2.dilate(vung.astype(np.uint8), np.ones((3, 3), np.uint8))
+    nen = cv2.cvtColor(cv2.inpaint(bgr, xoa * 255, 4, cv2.INPAINT_TELEA), cv2.COLOR_BGR2RGB).astype(float)
+    lum_nen = nen @ [.299, .587, .114]
+    lum_chu = MAU_TEN @ [.299, .587, .114]
+    # độ đậm của chữ ở từng điểm (giữ nét mảnh, viền mịn của chữ gốc)
+    alpha = np.clip((lum_nen - lum) / np.maximum(lum_nen - lum_chu, 1), 0, 1)
+    ra = nen.copy()
+    (m1, trai1, day1), (m2, trai2, day2) = dong
+    # dòng dưới cũ ("TÚ LINH") đặt lên chỗ dòng trên; dòng trên cũ ("TUẤN MINH") đặt xuống chỗ dòng dưới
+    for m, dx, dy in ((m2, trai1 - trai2, day1 - day2), (m1, trai2 - trai1, day2 - day1)):
+        ys, xs = np.nonzero(m)
+        al = alpha[ys, xs][:, None]
+        ny, nx = ys + dy, xs + dx
+        ra[ny, nx] = ra[ny, nx] * (1 - al) + MAU_TEN * al
+    return Image.fromarray(np.clip(ra, 0, 255).astype(np.uint8))
+
+
+if DAO_TEN:
+    mat_sau = dao_ten(mat_sau)
+
+# 2b. Mặt lời mời: viết "QUÝ KHÁCH" lên dòng chấm dưới "TRÂN TRỌNG KÍNH MỜI"
 K = 4
 f = ImageFont.truetype(PHONG, 29 * K)
 lop = Image.new("L", (mat_sau.width * K, mat_sau.height * K), 0)

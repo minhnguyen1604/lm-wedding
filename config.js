@@ -80,6 +80,14 @@ window.THIEP = {
     "images/gallery/04.jpg",
     "images/gallery/05.jpg",
     "images/gallery/06.jpg",
+    "images/gallery/07.jpg",
+    "images/gallery/08.jpg",
+    "images/gallery/09.jpg",
+    "images/gallery/10.jpg",
+    "images/gallery/11.jpg",
+    "images/gallery/12.jpg",
+    "images/gallery/13.jpg",
+    "images/gallery/14.jpg",
   ],
 
   // Dòng chữ cuối trang (để "" thì không hiện)

@@ -238,8 +238,14 @@
       img.alt = "Ảnh cưới " + (i + 1);
       img.draggable = false;
       img.decoding = "async";
-      img.onerror = function () { o.remove(); capNhat(); };
+      // Dải ảnh dùng bản nhỏ (images/gallery/nho/…) cho trượt nhẹ; bấm xem to thì dùng bản gốc.
+      // Thiếu bản nhỏ thì tự dùng bản gốc; bản gốc cũng lỗi thì bỏ ô đó.
+      img.onerror = function () {
+        if (img.getAttribute("src") !== src) { img.src = src; return; }
+        o.remove(); capNhat();
+      };
       img.dataset.src = src;    // chưa tải; chỉ tải khi khách cuộn gần tới album
+      img.dataset.nho = src.replace(/([^/]+)$/, "nho/$1");
       o.appendChild(img);
       o.addEventListener("click", function () {
         var ds = dsO().map(function (x) { return x.firstChild.dataset.src; });
@@ -255,7 +261,7 @@
     // và chỉ bắt đầu canh sau khi khách đã mở thiệp
     var taiAlbum = function () {
       Array.prototype.forEach.call(dai.querySelectorAll("img[data-src]"), function (img) {
-        if (!img.getAttribute("src")) img.src = img.dataset.src;
+        if (!img.getAttribute("src")) img.src = img.dataset.nho;
       });
     };
     var canhAlbum = function () {
@@ -268,7 +274,7 @@
     if (C.moThiep && C.moThiep.bat) document.addEventListener("thiep-da-mo", canhAlbum, { once: true });
     else canhAlbum();
 
-    // Ảnh ở giữa rõ và to nhất; càng xa giữa càng nhỏ và mờ
+    // Ảnh ở giữa rõ nhất, hai bên mờ nhẹ (không co giãn kích thước: co giãn theo ngón tay làm ảnh rung khi trượt)
     var capNhat = function () {
       var ds = dsO();
       var giua = dai.scrollLeft + dai.clientWidth / 2;
@@ -276,8 +282,7 @@
       ds.forEach(function (o, i) {
         var lech = Math.abs(o.offsetLeft + o.offsetWidth / 2 - giua);
         var t = Math.min(lech / (o.offsetWidth + 12), 1);
-        o.style.setProperty("--co", (1 - t * 0.1).toFixed(3));
-        o.style.setProperty("--ro", (1 - t * 0.5).toFixed(3));
+        o.style.setProperty("--ro", (1 - t * 0.4).toFixed(3));
         if (lech < ganNhat) { ganNhat = lech; dangO = i; }
       });
       $("da-dem").textContent = ds.length ? (dangO + 1) + " / " + ds.length : "";

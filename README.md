@@ -18,7 +18,7 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
    chọn "Không thể tham dự" thì chỉ hỏi họ tên. Dữ liệu ghi vào Google Sheet (xem bên dưới).
    Gửi xong hiện đôi lego kèm lời cảm ơn ("Xin cảm ơn Quý khách đã xác nhận tham dự! Rất mong được đón tiếp
    Quý khách trong ngày vui của gia đình chúng tôi.").
-4. **Album ảnh cưới** cuộn ngang, 6 ảnh, tự trôi chậm, chạm để xem to.
+4. **Album ảnh cưới** cuộn ngang, 14 ảnh (khung 3:4), tự trôi chậm, chạm để xem to. Dải ảnh dùng bản nhỏ `images/gallery/nho/`, ảnh hai bên chỉ mờ nhẹ, không co giãn (co giãn theo ngón tay làm ảnh rung khi trượt).
 5. **Địa điểm tổ chức**: Khách sạn Meliá Hà Nội, Grand Ballroom tầng 2, 44B Lý Thường Kiệt, bản đồ và nút Chỉ đường.
    Bản đồ dùng mã nhúng chính thức của Google Maps (`diaDiem.banDoNhung` trong `config.js`, lấy ở Chia sẻ → Nhúng bản đồ).
 6. **Chú rể bế cô dâu** (lego) đung đưa theo nhạc ở cuối thiệp, đường kẻ trang trí dưới chân (đã bỏ câu kết); **chạm vào bắn ra chùm tim**.
@@ -42,7 +42,7 @@ Tải trang: lúc mới mở link chỉ ~0,9 MB; nhạc tải khi bấm "Mở th
 | `images/logo-lm-vang.png` | **Logo LM đang dùng**: vàng đồng ánh kim, nền trong suốt — tạo từ `logo-lm.png` bằng `cong-cu/tao_logo_vang.py` |
 | `images/logo-lm.png` | Logo LM bản xám gốc (nền trong suốt) |
 | `images/thiep/` | `1.jpg` mặt lời mời, `2.jpg` mặt chương trình tiệc — tạo bằng `cong-cu/cat_thiep.py` |
-| `images/gallery/` | Ảnh album đã thu nhỏ — tạo bằng `cong-cu/thu_nho_anh_cuoi.py` |
+| `images/gallery/` | Ảnh album đã thu nhỏ (1600 px để xem to, `nho/` 1080 px cho dải ảnh) — tạo bằng `cong-cu/thu_nho_anh_cuoi.py` |
 | `images/lego/doi-toc-den-toc.png` | **Đôi lego đang dùng** ở cả màn mở thiệp, lời cảm ơn xác nhận và cuối thiệp: cô dâu và chú rể tóc đen, chú rể để tóc — tách từ `nguon/lego-doi-toc-den-toc.jpg` bằng `cong-cu/tach_nhan_vat.py` |
 | `images/lego/doi-be.png` | **Cuối thiệp**: chú rể bế cô dâu — tách từ `nguon/lego-doi-be.jpg` (khung trên trái) bằng `cong-cu/tach_nhan_vat.py`; đặt ở `moThiep.hinhCuoi` trong `config.js` |
 | `images/lego/` (còn lại) | Nhân vật dự phòng cùng bộ: `doi-toc-den-mu` (chú rể đội mũ), `co-dau-hoa`, `co-dau-voan`, `chu-re-nhan` (cầm hộp nhẫn), `chu-re-vay` — tách từ `nguon/lego-bang-nhan-vat.jpg` và `nguon/lego-doi-toc-den-mu.jpg` |
@@ -51,7 +51,7 @@ Tải trang: lúc mới mở link chỉ ~0,9 MB; nhạc tải khi bấm "Mở th
 | `audio/sugar-maroon-5.mp3` | **Nhạc nền đang dùng**: Sugar – Maroon 5 (cắt gọn 2:16, nén MP3 96 kbps, ~1,56 MB) |
 | `audio/canon-in-d.mp3` | Nhạc nền dự phòng (bản hộp nhạc tự tổng hợp bằng `cong-cu/tao_nhac.py`) |
 | `images/icon-32.png`, `icon-64.png`, `icon-180.png` | Biểu tượng tab trình duyệt (chỉ logo, nền trong suốt) và màn hình chính iPhone (nền kem) — tạo bằng `cong-cu/tao_logo_vang.py` |
-| `nguon/` | **Ảnh gốc**: bản duyệt in mới (`ban-duyet-in.jpeg`) và cũ, logo gốc, ảnh lego gốc, ảnh cưới gốc (`anh-cuoi/`) |
+| `nguon/` | **Ảnh gốc**: bản duyệt in mới (`ban-duyet-in.jpeg`) và cũ, logo gốc, ảnh lego gốc, ảnh cưới gốc (`anh-cuoi-moi/`: 14 ảnh đang dùng; `anh-cuoi/`: 6 ảnh cũ) |
 | `cong-cu/` | Script Python để tạo lại ảnh, nhạc từ ảnh gốc |
 | `qr/` | Mã QR (PNG, SVG) và script tạo mã `tao_qr.py` |
 | `QR-thiep-cuoi-*.pdf` | Mã QR bản PDF vector để gửi nhà in |

@@ -441,7 +441,7 @@ textarea.xn-o {
 }
 .o-anh {
   flex: 0 0 100%;          /* 100% phần giữa hai lề 12% = 76% bề ngang trang */
-  aspect-ratio: 2 / 3;     /* đúng tỉ lệ ảnh cưới (dọc 2:3) nên ảnh không bị cắt */
+  aspect-ratio: 3 / 4;     /* bộ ảnh mới đa số dọc 3:4 (có ảnh 2:3, 4:5): khung 3:4 cắt ít nhất; bấm xem to thì thấy đủ ảnh */
   margin: 0;
   padding: 6px;
   scroll-snap-align: center;
@@ -451,10 +451,9 @@ textarea.xn-o {
   cursor: zoom-in;
   font: inherit;
   color: inherit;
-  /* --co (cỡ) và --ro (độ rõ) do script đặt theo khoảng cách tới giữa màn hình */
-  transform: scale(var(--co, 1));
+  /* --ro (độ rõ) do script đặt theo khoảng cách tới giữa màn hình, đổi tức thì theo ngón tay (không trễ,
+     không co giãn kích thước) để trượt không bị rung */
   opacity: var(--ro, 1);
-  transition: transform .18s ease-out, opacity .18s ease-out;
 }
 .o-anh img {
   display: block;

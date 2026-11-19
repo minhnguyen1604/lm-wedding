@@ -29,13 +29,14 @@ ra[..., 3] = anh[..., 3]
 Image.fromarray(ra.astype(np.uint8)).save(GOC / "images/logo-lm-vang.png", optimize=True)
 print("images/logo-lm-vang.png", (W, H))
 
-# Biểu tượng trên tab trình duyệt (32 px) và khi lưu ra màn hình chính iPhone (180 px): logo vàng trên nền kem
+# Biểu tượng trên tab trình duyệt: chỉ logo LM, nền trong suốt (32 px và 64 px cho màn hình sắc nét).
+# Riêng biểu tượng màn hình chính iPhone (180 px) cần nền đặc (iPhone tô nền trong suốt thành đen) nên giữ nền kem.
 logo = Image.open(GOC / "images/logo-lm-vang.png")
 logo = logo.crop(logo.getbbox())
-for co, le in ((32, 2), (180, 26)):
-    nen = Image.new("RGBA", (co, co), (247, 242, 231, 255))
+for co, le, nen_mau in ((32, 0, None), (64, 0, None), (180, 26, (247, 242, 231, 255))):
+    nen = Image.new("RGBA", (co, co), nen_mau or (0, 0, 0, 0))
     l = logo.copy()
     l.thumbnail((co - 2 * le, co - 2 * le), Image.LANCZOS)
     nen.alpha_composite(l, ((co - l.width) // 2, (co - l.height) // 2))
-    nen.convert("RGB").save(GOC / f"images/icon-{co}.png", optimize=True)
+    (nen if nen_mau is None else nen.convert("RGB")).save(GOC / f"images/icon-{co}.png", optimize=True)
     print(f"images/icon-{co}.png")

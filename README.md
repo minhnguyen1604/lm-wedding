@@ -49,7 +49,7 @@ Tải trang: lúc mới mở link chỉ ~0,9 MB; nhạc tải khi bấm "Mở th
 | `images/lego-doi.png` | Đôi lego nét vẽ màu nước bản trước — tách từ `nguon/lego-moi-goc.jpg` bằng `cong-cu/tach_lego_moi.py` |
 | `images/lego-chu-re.png`, `lego-co-dau.png` | Đôi lego cũ (ảnh chụp, hai ảnh riêng) — tạo bằng `cong-cu/tach_lego.py`; đổi lại trong `config.js` nếu muốn |
 | `audio/canon-in-d.mp3` | Nhạc nền — tạo bằng `cong-cu/tao_nhac.py` |
-| `images/icon-32.png`, `icon-180.png` | Biểu tượng tab trình duyệt và màn hình chính iPhone — tạo bằng `cong-cu/tao_logo_vang.py` |
+| `images/icon-32.png`, `icon-64.png`, `icon-180.png` | Biểu tượng tab trình duyệt (chỉ logo, nền trong suốt) và màn hình chính iPhone (nền kem) — tạo bằng `cong-cu/tao_logo_vang.py` |
 | `nguon/` | **Ảnh gốc**: bản duyệt in mới (`ban-duyet-in.jpeg`) và cũ, logo gốc, ảnh lego gốc, ảnh cưới gốc (`anh-cuoi/`) |
 | `cong-cu/` | Script Python để tạo lại ảnh, nhạc từ ảnh gốc |
 | `qr/` | Mã QR (PNG, SVG) và script tạo mã `tao_qr.py` |

@@ -9,10 +9,10 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
 
 ## Thiệp đang có gì (theo thứ tự trên trang)
 
-1. **Màn mở thiệp**: logo LM, "Save the date" (phông Pinyon Script), ngày 02.01.2027, đôi lego và nút "Mở thiệp".
+1. **Màn mở thiệp**: logo LM vàng đồng, "Save the date" (phông Pinyon Script, màu nâu xám nhạt), ngày 02.01.2027, đôi lego và nút "Mở thiệp".
    Chạm vào thì đôi lego nhún nhảy, pháo hoa rực rỡ nổ (tên lửa, 11 chùm nhiều màu, kim tuyến, ba chùm kết),
    nhạc Canon in D bắt đầu. Màn này luôn tự đóng sau ~6 giây kể cả khi máy tạm dừng hoạt ảnh.
-2. **Hai mặt thiệp** cắt từ bản duyệt in: mặt lời mời (có chữ "QUÝ KHÁCH" in hoa đậm trên dòng chấm)
+2. **Hai mặt thiệp** cắt từ bản duyệt in: mặt lời mời (có chữ "QUÝ KHÁCH" in hoa đậm nghiêng trên dòng chấm)
    và mặt chương trình tiệc cưới (đã bỏ mã QR). Chạm vào để phóng to.
 3. **Xác nhận tham dự**: chọn "Sẽ tham dự" thì hiện họ tên, số người, khách nhà trai/gái, lời chúc;
    chọn "Không thể tham dự" thì chỉ hỏi họ tên. Dữ liệu ghi vào Google Sheet (xem bên dưới).
@@ -34,7 +34,8 @@ Tải trang: lúc mới mở link chỉ ~0,9 MB; nhạc tải khi bấm "Mở th
 | `config.js` | **Toàn bộ nội dung thiệp**: màn mở thiệp, khung thiệp, địa điểm, form xác nhận, album. Sửa nội dung chỉ cần sửa file này. |
 | `index.html`, `style.css`, `script.js` | Khung trang, giao diện, hiệu ứng. Độ mờ nền chỉnh ở biến `--do-mo-nen` trong `style.css`. |
 | `images/nen.jpg` | Ảnh nền hoa |
-| `images/logo-lm.png` | Logo LM (nền trong suốt) |
+| `images/logo-lm-vang.png` | **Logo LM đang dùng**: vàng đồng ánh kim, nền trong suốt — tạo từ `logo-lm.png` bằng `cong-cu/tao_logo_vang.py` |
+| `images/logo-lm.png` | Logo LM bản xám gốc (nền trong suốt) |
 | `images/thiep/` | `1.jpg` mặt lời mời, `2.jpg` mặt chương trình tiệc — tạo bằng `cong-cu/cat_thiep.py` |
 | `images/gallery/` | Ảnh album đã thu nhỏ — tạo bằng `cong-cu/thu_nho_anh_cuoi.py` |
 | `images/lego/doi-toc-den-toc.png` | **Đôi lego đang dùng** ở cả màn mở thiệp, lời cảm ơn xác nhận và cuối thiệp: cô dâu và chú rể tóc đen, chú rể để tóc — tách từ `nguon/lego-doi-toc-den-toc.jpg` bằng `cong-cu/tach_nhan_vat.py` |
@@ -86,11 +87,12 @@ Khoảng 1–2 phút sau link công khai đổi theo. Máy nào còn hiện bả
 
 | Script | Việc |
 |---|---|
-| `cat_thiep.py [ảnh duyệt in]` | Cắt 2 mặt thiệp từ `nguon/ban-duyet-in.jpeg`, viết "QUÝ KHÁCH", bỏ QR ở mặt chương trình, **kiểm tra QR in trên thiệp khớp link**. Dùng phông Palatino đậm có sẵn trên Windows. Khi nhà in gửi bản duyệt mới (cùng bố cục): chép vào `nguon/ban-duyet-in.jpeg` rồi chạy lại. |
+| `cat_thiep.py [ảnh duyệt in]` | Cắt 2 mặt thiệp từ `nguon/ban-duyet-in.jpeg`, viết "QUÝ KHÁCH", bỏ QR ở mặt chương trình, **kiểm tra QR in trên thiệp khớp link**. Dùng phông Palatino đậm nghiêng có sẵn trên Windows. Khi nhà in gửi bản duyệt mới (cùng bố cục): chép vào `nguon/ban-duyet-in.jpeg` rồi chạy lại. |
 | `thu_nho_anh_cuoi.py [thư mục]` | Thu nhỏ ảnh cưới gốc còn cạnh dài 1600 px, bỏ EXIF, ghi `images/gallery/01.jpg…`. Thứ tự sửa trong danh sách `THU_TU`. Nhớ cập nhật `gallery` trong `config.js`. |
 | `tach_nhan_vat.py [tên...]` | Tách các nhân vật trong `images/lego/` khỏi nền tranh bằng GrabCut; khai báo khung và đường bao váy vẽ tay trong `NHAN_VAT`. Ghi bản xem thử `_thu/xem-nhan-vat.png`. Chạy khá lâu (vài phút mỗi hình). |
 | `tach_lego_moi.py` | Tách đôi lego đang dùng khỏi nền tranh `nguon/lego-moi-goc.jpg` bằng GrabCut (cần `opencv-python-headless`); đường bao thô vẽ tay cho riêng ảnh này. |
 | `tach_lego.py` | Tách đôi lego cũ khỏi nền ảnh `nguon/lego-goc.png` (toạ độ xoá nét thừa chỉnh tay cho ảnh này). |
+| `tao_logo_vang.py` | Tô logo xám `images/logo-lm.png` thành vàng ánh kim `images/logo-lm-vang.png`. Muốn sáng/trầm hơn thì sửa ba màu `TREN`, `GIUA`, `DUOI` trong file. |
 | `tao_nhac.py` | Tổng hợp bản Canon in D kiểu hộp nhạc, ghi `audio/canon-in-d.mp3`. Muốn dùng bản thu thật thì thay file mp3 và giữ tên. |
 | `tao_trang_thu.py` | Tạo `thu.html` để xem thử thiệp với cài đặt khác mà không đụng bản thật. |
 

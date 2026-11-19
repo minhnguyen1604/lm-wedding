@@ -3,8 +3,9 @@
    ============================================================ */
 window.THIEP = {
 
-  // Logo ở đầu trang (để "" nếu không muốn hiện)
-  logo: "images/logo-lm.png",
+  // Logo ở đầu trang và màn mở thiệp (để "" nếu không muốn hiện)
+  //  logo-lm-vang.png: vàng ánh kim (đang dùng); logo-lm.png: bản xám gốc
+  logo: "images/logo-lm-vang.png",
 
   // 0) MÀN MỞ THIỆP + NHẠC + ĐÔI BÚP BÊ
   //    bat: true thì khách vào link thấy màn "Mở thiệp" trước; chạm vào thì hai búp bê bước lại

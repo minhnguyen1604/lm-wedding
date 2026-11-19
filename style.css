@@ -712,7 +712,7 @@ textarea.xn-o {
   font-size: clamp(38px, 11.6vw, 50px);
   font-weight: 400;
   line-height: 1.25;
-  color: var(--vang-dam);
+  color: #7d7262;          /* nâu xám nhạt, dịu với nền hoa, tách màu với logo vàng */
   text-wrap: balance;
 }
 .bia-ngay {

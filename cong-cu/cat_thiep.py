@@ -1,6 +1,6 @@
 """Cắt hai mặt thiệp từ bản duyệt in và ghi vào images/thiep/.
 
-- images/thiep/1.jpg: mặt lời mời, có viết "QUÝ KHÁCH" (in hoa đậm) lên dòng chấm
+- images/thiep/1.jpg: mặt lời mời, có viết "QUÝ KHÁCH" (in hoa, đậm nghiêng) lên dòng chấm
 - images/thiep/2.jpg: mặt chương trình tiệc cưới, đã bỏ mã QR và lề trống
 Đồng thời kiểm tra mã QR in trên thiệp có trỏ đúng link thiệp không.
 
@@ -8,7 +8,7 @@ Cách dùng (chạy ở thư mục gốc của repo):
     pip install pillow numpy "qrcode[pil]"
     python cong-cu/cat_thiep.py                       # dùng nguon/ban-duyet-in.jpeg
     python cong-cu/cat_thiep.py nguon/ban-khac.jpeg   # bản duyệt in khác (cùng bố cục)
-Phông chữ: Palatino Linotype đậm (C:\\Windows\\Fonts\\palab.ttf) có sẵn trên Windows.
+Phông chữ: Palatino Linotype đậm nghiêng (C:\\Windows\\Fonts\\palabi.ttf) có sẵn trên Windows.
 """
 import sys
 from pathlib import Path
@@ -21,7 +21,7 @@ from qrcode.constants import ERROR_CORRECT_Q
 GOC = Path(__file__).resolve().parent.parent
 NGUON = Path(sys.argv[1]) if len(sys.argv) > 1 else GOC / "nguon" / "ban-duyet-in.jpeg"
 URL = "https://minhnguyen1604.github.io/lm-wedding/"
-PHONG = r"C:\Windows\Fonts\palab.ttf"
+PHONG = r"C:\Windows\Fonts\palabi.ttf"    # Palatino đậm nghiêng (bản đứng: palab.ttf)
 MAU_CHU = (58, 62, 49)            # xanh rêu đậm như chữ trên thiệp
 
 ban_in = Image.open(NGUON).convert("RGB")

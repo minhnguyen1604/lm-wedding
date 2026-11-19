@@ -10,7 +10,7 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
 ## Thiệp đang có gì (theo thứ tự trên trang)
 
 1. **Màn mở thiệp**: logo LM vàng đồng, "Save the date" (phông Pinyon Script, màu nâu xám nhạt), ngày 02.01.2027, đôi lego và nút "Mở thiệp".
-   Chạm vào thì đôi lego nhún nhảy, pháo hoa rực rỡ nổ (tên lửa, 11 chùm nhiều màu, kim tuyến, ba chùm kết),
+   Chạm vào thì đôi lego nhún nhảy, pháo hoa kiểu liễu vàng nổ (một màu vàng kim cùng màu logo, 11 chùm, vệt rủ như cành liễu, kim tuyến, ba chùm kết),
    nhạc Canon in D bắt đầu. Màn này luôn tự đóng sau ~6 giây kể cả khi máy tạm dừng hoạt ảnh.
 2. **Hai mặt thiệp** cắt từ bản duyệt in: mặt lời mời (có chữ "QUÝ KHÁCH" in hoa đậm nghiêng trên dòng chấm)
    và mặt chương trình tiệc cưới (đã bỏ mã QR). Chạm vào để phóng to.
@@ -120,6 +120,8 @@ xuất bản cho "Bất kỳ ai có đường liên kết"; lấy mã `entry.` q
 - Đôi búp bê / lego tự vẽ bằng SVG — bỏ, dùng ảnh lego (code vẽ vẫn còn trong `script.js` làm phương án dự phòng).
 - Đôi lego ảnh chụp (hai ảnh riêng, bước lại gần nhau) — thay bằng đôi lego nét vẽ màu nước hợp tông thiệp hơn.
 - Khung vòm ở màn mở thiệp — bỏ.
+- Pháo hoa nhiều màu (vàng, hồng, đỏ, tím, xanh ngọc) — rối trên nền kem, thay bằng liễu vàng.
+  Trang `_thu/phao-hoa-thu.html` có bản cũ và các kiểu đã thử (liễu vàng, hoa cúc 3 màu, trái tim) để bấm xem lại.
 - Cảnh cầu hôn ở màn mở thiệp (chú rể đội mũ cầm nhẫn bước tới cô dâu) — tạm tắt vì muốn chú rể để tóc;
   bật lại bằng `moThiep.hinhMo` trong `config.js` (dòng mẫu có sẵn). Bảng nhân vật chưa có chú rể để tóc cầm nhẫn.
 - Câu kết "Sự hiện diện của Quý khách là niềm vinh hạnh..." cuối thiệp — bỏ (`loiKet: ""`).

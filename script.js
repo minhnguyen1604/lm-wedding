@@ -492,8 +492,9 @@
   }
 
   /* ---------- Pháo hoa trên màn mở thiệp ---------- */
-  // Rực rỡ: tên lửa bay lên kéo vệt sáng, nổ thành chùm nhiều lớp màu, có kim tuyến lấp lánh rơi chậm,
-  // cuối cùng ba chùm nổ cùng lúc. Gọi xong() khi gần hết để màn mở thiệp mờ dần cùng tàn pháo.
+  // Kiểu "liễu vàng": một màu vàng kim cùng màu logo. Tên lửa bay lên rắc tia lửa, nổ thành chùm vệt dài
+  // rủ xuống như cành liễu, đuôi lấp lánh, có kim tuyến rơi chậm; kết bằng ba chùm lớn.
+  // Gọi xong() khi gần hết để màn mở thiệp mờ dần cùng tàn pháo. (Các kiểu khác đã thử: _thu/phao-hoa-thu.html)
   function phaoHoa(canvas, xong) {
     var ctx = canvas.getContext("2d");
     var tiLe = Math.min(window.devicePixelRatio || 1, 2);
@@ -502,70 +503,50 @@
     canvas.height = H * tiLe;
     ctx.scale(tiLe, tiLe);
 
-    // Bộ màu đậm, rõ trên nền kem; mỗi chùm lấy một cặp màu chính
-    var BO_MAU = [
-      ["#c8901a", "#f0c24b"],     // vàng kim
-      ["#d6336c", "#f783ac"],     // hồng đậm
-      ["#c0392b", "#f39c7a"],     // đỏ san hô
-      ["#7b3fa0", "#c39bd3"],     // tím
-      ["#2e7d6b", "#7fc8a9"],     // xanh ngọc
-      ["#b8860b", "#ffd166"]      // vàng cam
-    ];
-    var KIM_TUYEN = ["#fff4c2", "#ffe08a", "#ffffff"];
-    // Lịch bắn: thời điểm (ms) và vị trí nổ theo tỉ lệ màn hình
+    // Vàng đủ đậm để nổi trên nền kem
+    var VANG = ["#b8862b", "#c99a3a", "#a87a22"];
+    var VANG_SANG = ["#d9ad4f", "#e2bd66"];
+    // Lịch bắn: thời điểm (ms), vị trí nổ theo tỉ lệ màn hình, độ to
     var lich = [
-      { t: 0,    x: 0.50, y: 0.24 },
-      { t: 220,  x: 0.22, y: 0.18 },
-      { t: 420,  x: 0.78, y: 0.16 },
-      { t: 650,  x: 0.36, y: 0.32 },
-      { t: 850,  x: 0.66, y: 0.30 },
-      { t: 1080, x: 0.14, y: 0.36 },
-      { t: 1250, x: 0.86, y: 0.34 },
-      { t: 1450, x: 0.50, y: 0.12 },
-      { t: 1800, x: 0.28, y: 0.22, to: 1.25 },   // ba chùm kết
-      { t: 1800, x: 0.72, y: 0.22, to: 1.25 },
-      { t: 1880, x: 0.50, y: 0.30, to: 1.4 }
+      { t: 0, x: .5, y: .2, to: 1.1 }, { t: 200, x: .2, y: .15 }, { t: 400, x: .8, y: .16 },
+      { t: 620, x: .34, y: .28 }, { t: 800, x: .66, y: .27 }, { t: 1000, x: .12, y: .3, to: .8 },
+      { t: 1150, x: .88, y: .3, to: .8 }, { t: 1350, x: .5, y: .1 },
+      { t: 1750, x: .26, y: .2, to: 1.3 }, { t: 1750, x: .74, y: .2, to: 1.3 },   // ba chùm kết
+      { t: 1850, x: .5, y: .26, to: 1.5 }
     ];
-    var BAY = 380;                 // ms tên lửa bay lên trước khi nổ
+    var BAY = 420;                 // ms tên lửa bay lên trước khi nổ
     var tenLua = [], hat = [], batDau = null, daGoiXong = false;
 
     function chon(ds) { return ds[Math.floor(Math.random() * ds.length)]; }
 
     function no(x, y, to) {
-      var cap = chon(BO_MAU), so = Math.round(95 * to);
-      // vòng ngoài + vòng trong + hạt rải
+      // các vệt liễu
+      var so = Math.round(90 * to);
       for (var i = 0; i < so; i++) {
-        var goc = (Math.PI * 2 * i) / so + Math.random() * 0.08;
-        var vong = i % 3;
-        var nhanh = (vong === 0 ? 5.6 : vong === 1 ? 3.6 : 1.4 + Math.random() * 3.6) * to * (0.92 + Math.random() * 0.16);
-        hat.push({
-          x: x, y: y, vx: Math.cos(goc) * nhanh, vy: Math.sin(goc) * nhanh,
-          song: 1, giam: 0.0105 + Math.random() * 0.006,
-          mau: vong === 1 ? cap[1] : cap[0], r: 1.7 + Math.random() * 1.2, kim: false
-        });
+        var g = Math.PI * 2 * i / so + Math.random() * .1, n = (3.1 + Math.random() * 1.1) * to;
+        hat.push({ x: x, y: y, vx: Math.cos(g) * n, vy: Math.sin(g) * n, song: 1,
+          giam: .0062 + Math.random() * .0022, keo: .962, roi: .032, r: 1.6,
+          mau: chon(VANG), dau: chon(VANG_SANG), vet: [], dai: 16 });
       }
-      // kim tuyến: hạt nhỏ sáng, lấp lánh, rơi chậm và sống lâu hơn
-      for (var k = 0; k < 34 * to; k++) {
-        var g = Math.random() * Math.PI * 2, n = Math.random() * 3.2 * to;
-        hat.push({
-          x: x, y: y, vx: Math.cos(g) * n, vy: Math.sin(g) * n,
-          song: 1, giam: 0.0065 + Math.random() * 0.004,
-          mau: chon(KIM_TUYEN), r: 1 + Math.random() * 0.8, kim: true, pha: Math.random() * 6.28
-        });
+      // kim tuyến: hạt nhỏ lấp lánh, rơi chậm, sống lâu
+      for (var k = 0; k < 46 * to; k++) {
+        var g2 = Math.random() * 6.283, n2 = Math.random() * 3.4 * to;
+        hat.push({ x: x, y: y, vx: Math.cos(g2) * n2, vy: Math.sin(g2) * n2, song: 1,
+          giam: .0055 + Math.random() * .004, keo: .975, roi: .014, r: 1 + Math.random() * .7,
+          mau: chon(VANG_SANG.concat(VANG)), kim: true, pha: Math.random() * 6 });
       }
       // chớp sáng tại tâm nổ
-      hat.push({ x: x, y: y, vx: 0, vy: 0, song: 1, giam: 0.08, mau: cap[1], r: 26 * to, chop: true });
+      hat.push({ x: x, y: y, song: 1, giam: .06, r: 42 * to, chop: true });
     }
 
     function khung(luc) {
       if (batDau === null) batDau = luc;
       var da = luc - batDau;
 
-      // phóng tên lửa đúng lịch
       lich.forEach(function (p) {
         if (!p.daBan && da >= p.t) {
           p.daBan = true;
-          tenLua.push({ x: p.x * W + (Math.random() - 0.5) * 30, y: H + 10, dx: p.x * W, dy: p.y * H,
+          tenLua.push({ x: p.x * W + (Math.random() - .5) * 24, y: H + 10, dx: p.x * W, dy: p.y * H,
             batDau: da, to: p.to || 1 });
         }
       });
@@ -573,20 +554,16 @@
       ctx.clearRect(0, 0, W, H);
       ctx.lineCap = "round";
 
-      // tên lửa: chấm sáng bay lên kéo vệt
+      // tên lửa: chấm sáng bay lên kéo vệt, rắc tia lửa
       tenLua = tenLua.filter(function (t) {
-        var k = Math.min(1, (da - t.batDau) / BAY);
-        var e = 1 - Math.pow(1 - k, 3);
-        var x = t.x + (t.dx - t.x) * e, y = t.y + (t.dy - t.y) * e;
-        var ky = t.y + (t.dy - t.y) * Math.max(0, e - 0.18);
-        var kx = t.x + (t.dx - t.x) * Math.max(0, e - 0.18);
-        ctx.globalAlpha = 0.75;
-        ctx.strokeStyle = "#e0b04a";
-        ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(kx, ky); ctx.lineTo(x, y); ctx.stroke();
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = "#fff6d5";
-        ctx.beginPath(); ctx.arc(x, y, 2.4, 0, 6.2832); ctx.fill();
+        var k = Math.min(1, (da - t.batDau) / BAY), e = 1 - Math.pow(1 - k, 3);
+        var x = t.x + (t.dx - t.x) * e, y = t.y + (t.dy - t.y) * e, e2 = Math.max(0, e - .22);
+        ctx.globalAlpha = .55; ctx.strokeStyle = "#c99a3a"; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(t.x + (t.dx - t.x) * e2, t.y + (t.dy - t.y) * e2); ctx.lineTo(x, y); ctx.stroke();
+        ctx.globalAlpha = 1; ctx.fillStyle = "#d9ad4f";
+        ctx.beginPath(); ctx.arc(x, y, 2, 0, 6.2832); ctx.fill();
+        if (Math.random() < .7) hat.push({ x: x, y: y, vx: (Math.random() - .5) * .6, vy: .4 + Math.random() * .6,
+          song: .8, giam: .03, keo: .97, roi: .02, r: .9, mau: chon(VANG_SANG), kim: true, pha: Math.random() * 6 });
         if (k >= 1) { no(t.dx, t.dy, t.to); return false; }
         return true;
       });
@@ -597,44 +574,48 @@
         if (h.song <= 0) return false;
         if (h.chop) {                       // chớp sáng: quầng tròn mờ dần
           var q = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, h.r);
-          q.addColorStop(0, "rgba(255,250,225," + (0.9 * h.song) + ")");
-          q.addColorStop(1, "rgba(255,250,225,0)");
-          ctx.globalAlpha = 1;
-          ctx.fillStyle = q;
+          q.addColorStop(0, "rgba(236,205,140," + (.55 * h.song) + ")");
+          q.addColorStop(1, "rgba(236,205,140,0)");
+          ctx.globalAlpha = 1; ctx.fillStyle = q;
           ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.2832); ctx.fill();
           return true;
         }
-        var can = h.kim ? 0.985 : 0.968;
-        h.vx *= can;
-        h.vy = h.vy * can + (h.kim ? 0.018 : 0.04);
+        h.vx *= h.keo;
+        h.vy = h.vy * h.keo + h.roi;
         h.x += h.vx;
         h.y += h.vy;
-        if (h.kim) {                        // lấp lánh: nhấp nháy theo nhịp riêng
-          h.pha += 0.5;
-          ctx.globalAlpha = h.song * (0.45 + 0.55 * Math.abs(Math.sin(h.pha)));
+        if (h.kim) {                        // kim tuyến: nhấp nháy theo nhịp riêng
+          h.pha += .45;
+          ctx.globalAlpha = h.song * (.35 + .65 * Math.abs(Math.sin(h.pha)));
           ctx.fillStyle = h.mau;
           ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.2832); ctx.fill();
           return true;
         }
-        // quầng mờ phía sau cho cảm giác phát sáng
-        ctx.globalAlpha = h.song * 0.18;
-        ctx.fillStyle = h.mau;
-        ctx.beginPath(); ctx.arc(h.x, h.y, h.r * 3.2, 0, 6.2832); ctx.fill();
-        // vệt kéo theo hướng bay
-        ctx.globalAlpha = h.song * 0.6;
-        ctx.strokeStyle = h.mau;
-        ctx.lineWidth = h.r * 1.3;
-        ctx.beginPath(); ctx.moveTo(h.x - h.vx * 4, h.y - h.vy * 4); ctx.lineTo(h.x, h.y); ctx.stroke();
-        // đầu hạt sáng
-        ctx.globalAlpha = Math.min(1, h.song * 1.4);
-        ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.2832); ctx.fill();
+        // vệt liễu: nhớ các vị trí cũ, vẽ nhạt dần về phía đuôi
+        h.vet.push(h.x, h.y);
+        if (h.vet.length > h.dai * 2) h.vet.splice(0, 2);
+        var n = h.vet.length / 2;
+        ctx.strokeStyle = h.mau; ctx.lineWidth = h.r;
+        for (var i = 1; i < n; i++) {
+          ctx.globalAlpha = h.song * (i / n) * .75;
+          ctx.beginPath();
+          ctx.moveTo(h.vet[2 * i - 2], h.vet[2 * i - 1]); ctx.lineTo(h.vet[2 * i], h.vet[2 * i + 1]);
+          ctx.stroke();
+        }
+        // gần tàn thì đầu vệt lấp lánh; quầng mờ cho cảm giác phát sáng
+        var sang = h.song < .45 ? (.3 + .7 * Math.abs(Math.sin(da / 55 + h.x))) : 1;
+        ctx.fillStyle = h.dau;
+        ctx.globalAlpha = h.song * .16 * sang;
+        ctx.beginPath(); ctx.arc(h.x, h.y, h.r * 3.4, 0, 6.2832); ctx.fill();
+        ctx.globalAlpha = Math.min(1, h.song * 1.5) * sang;
+        ctx.beginPath(); ctx.arc(h.x, h.y, h.r * 1.1, 0, 6.2832); ctx.fill();
         return true;
       });
       ctx.globalAlpha = 1;
 
       // gần hết thì cho màn mở thiệp mờ dần cùng tàn pháo
-      if (!daGoiXong && da > 3000) { daGoiXong = true; if (xong) xong(); }
-      if (da < 2300 || hat.length || tenLua.length) requestAnimationFrame(khung);
+      if (!daGoiXong && da > 3400) { daGoiXong = true; if (xong) xong(); }
+      if (da < 2400 || hat.length || tenLua.length) requestAnimationFrame(khung);
       else { ctx.clearRect(0, 0, W, H); if (!daGoiXong && xong) { daGoiXong = true; xong(); } }
     }
     requestAnimationFrame(khung);

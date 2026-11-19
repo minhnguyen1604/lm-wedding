@@ -11,7 +11,7 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
 
 1. **Màn mở thiệp**: logo LM vàng đồng, "Save the date" (phông Pinyon Script, màu nâu xám nhạt), ngày 02.01.2027, đôi lego và nút "Mở thiệp".
    Chạm vào thì đôi lego nhún nhảy, pháo hoa kiểu liễu vàng nổ (một màu vàng kim cùng màu logo, 11 chùm, vệt rủ như cành liễu, kim tuyến, ba chùm kết),
-   nhạc Canon in D bắt đầu. Màn này luôn tự đóng sau ~6 giây kể cả khi máy tạm dừng hoạt ảnh.
+   nhạc Sugar (Maroon 5) bắt đầu. Màn này luôn tự đóng sau ~6 giây kể cả khi máy tạm dừng hoạt ảnh.
 2. **Hai mặt thiệp** cắt từ bản duyệt in: mặt lời mời (có chữ "QUÝ KHÁCH" in hoa đậm nghiêng trên dòng chấm; tên đảo thành "TÚ LINH" trước, "TUẤN MINH" sau — khác bản in)
    và mặt chương trình tiệc cưới (đã bỏ mã QR). Chạm vào để phóng to.
 3. **Xác nhận tham dự**: chọn "Sẽ tham dự" thì hiện họ tên, số người, khách nhà trai/gái, lời chúc;
@@ -48,7 +48,8 @@ Tải trang: lúc mới mở link chỉ ~0,9 MB; nhạc tải khi bấm "Mở th
 | `images/lego/` (còn lại) | Nhân vật dự phòng cùng bộ: `doi-toc-den-mu` (chú rể đội mũ), `co-dau-hoa`, `co-dau-voan`, `chu-re-nhan` (cầm hộp nhẫn), `chu-re-vay` — tách từ `nguon/lego-bang-nhan-vat.jpg` và `nguon/lego-doi-toc-den-mu.jpg` |
 | `images/lego-doi.png` | Đôi lego nét vẽ màu nước bản trước — tách từ `nguon/lego-moi-goc.jpg` bằng `cong-cu/tach_lego_moi.py` |
 | `images/lego-chu-re.png`, `lego-co-dau.png` | Đôi lego cũ (ảnh chụp, hai ảnh riêng) — tạo bằng `cong-cu/tach_lego.py`; đổi lại trong `config.js` nếu muốn |
-| `audio/canon-in-d.mp3` | Nhạc nền — tạo bằng `cong-cu/tao_nhac.py` |
+| `audio/sugar-maroon-5.mp3` | **Nhạc nền đang dùng**: Sugar – Maroon 5 (cắt gọn 2:16, nén MP3 96 kbps, ~1,56 MB) |
+| `audio/canon-in-d.mp3` | Nhạc nền dự phòng (bản hộp nhạc tự tổng hợp bằng `cong-cu/tao_nhac.py`) |
 | `images/icon-32.png`, `icon-64.png`, `icon-180.png` | Biểu tượng tab trình duyệt (chỉ logo, nền trong suốt) và màn hình chính iPhone (nền kem) — tạo bằng `cong-cu/tao_logo_vang.py` |
 | `nguon/` | **Ảnh gốc**: bản duyệt in mới (`ban-duyet-in.jpeg`) và cũ, logo gốc, ảnh lego gốc, ảnh cưới gốc (`anh-cuoi/`) |
 | `cong-cu/` | Script Python để tạo lại ảnh, nhạc từ ảnh gốc |

@@ -26,7 +26,7 @@ window.THIEP = {
     // Cuối thiệp: chú rể bế cô dâu (tách từ nguon/lego-doi-be.jpg). Để null thì dùng `hinh`.
     hinhCuoi: { doi: "images/lego/doi-be.png" },
     // File nhạc, ví dụ "audio/canon-in-d.mp3". Để "" thì không có nhạc và không có đĩa nhạc.
-    nhac: "audio/canon-in-d.mp3",
+    nhac: "audio/sugar-maroon-5.mp3",
   },
 
   // 1) CÁC KHUNG THIỆP (ảnh thiết kế thông tin đám cưới)

@@ -26,6 +26,12 @@ VAY_CO_DAU_HOA = [(285, 200), (375, 200), (395, 262), (400, 320), (440, 458), (2
 VAY_CO_DAU_VOAN = [(836, 68), (800, 105), (779, 145), (772, 210), (771, 275), (785, 300), (805, 310), (828, 318),
                    (786, 452), (1062, 452), (1003, 322), (1040, 292), (1066, 270), (1068, 205), (1040, 165),
                    (1005, 122), (975, 75), (940, 48), (880, 45)]
+VAY_CO_DAU_BUI = [(1165, 200), (1300, 200), (1308, 260), (1318, 350), (1342, 462), (1138, 462), (1150, 350), (1157, 260)]
+BUI_TOC = [(1190, 68), (1202, 52), (1240, 38), (1278, 50), (1292, 68), (1280, 82), (1200, 82)]   # búi tóc và hoa cài
+# chú rể bế cô dâu (nguon/lego-doi-be.jpg, khung trên trái): thân váy và chân váy xoè
+VAY_BE = [[(345, 185), (398, 178), (410, 250), (345, 262)],
+          [(330, 290), (440, 255), (560, 232), (640, 300), (620, 340), (520, 400), (445, 445), (400, 445),
+           (380, 350), (332, 322)]]
 VAY_DOI = [(495, 585), (612, 585), (630, 700), (640, 810), (698, 1137), (304, 1137), (420, 770), (470, 700)]
 
 # tên: (ảnh nguồn, khung (x0, y0, x1, y1), chiều cao xuất, đa giác chắc chắn là hình)
@@ -34,6 +40,9 @@ NHAN_VAT = {
     "co-dau-voan":    (BANG, (762, 18, 1074, 468), 420, [VAY_CO_DAU_VOAN]),  # cô dâu đội voan, vẫy tay
     "chu-re-nhan":    (BANG, (196, 490, 452, 936), 420, []),                 # chú rể cầm hộp nhẫn
     "chu-re-vay":     (BANG, (512, 488, 748, 938), 420, []),                 # chú rể ngả mũ vẫy tay
+    "doi-be": ("nguon/lego-doi-be.jpg", (248, 15, 652, 478), 520, VAY_BE),       # chú rể bế cô dâu (cuối thiệp)
+    "co-dau-bui-toc": (BANG, (1128, 28, 1348, 468), 420, [VAY_CO_DAU_BUI, BUI_TOC]),  # cô dâu búi tóc, váy ren (cuối thiệp)
+    "chu-re-khoanh-tay": (BANG, (1162, 488, 1322, 940), 420, []),           # chú rể đội mũ khoanh tay (cuối thiệp)
     "doi-toc-den-mu": ("nguon/lego-doi-toc-den-mu.jpg", (296, 255, 990, 1148), 520, [VAY_DOI]),
     # đôi tóc đen, chú rể để tóc
     "doi-toc-den-toc": ("nguon/lego-doi-toc-den-toc.jpg", (270, 288, 990, 1160), 520,
@@ -42,7 +51,14 @@ NHAN_VAT = {
                          [(702, 505), (812, 505), (808, 600), (760, 668), (732, 668), (706, 600)]]),   # sơ mi trắng chú rể
 }
 # Vùng chắc chắn là nền (không thuộc nhân vật) cho từng nhân vật, nếu cần
-NEN_CHAC = {}
+NEN_CHAC = {
+    # bên phải chú rể: trái tim nhỏ và hoa rum của tranh
+    "doi-be": [[(565, 15), (652, 15), (652, 225), (588, 225), (570, 150)],
+               [(632, 140), (652, 140), (652, 292), (642, 292)]],
+    # hai bên váy ren cô dâu búi tóc: nền kem gần trùng màu ren
+    "co-dau-bui-toc": [[(1128, 100), (1150, 100), (1154, 200), (1145, 330), (1133, 462), (1128, 462)],
+                       [(1348, 100), (1326, 100), (1313, 200), (1323, 330), (1347, 462), (1348, 462)]],
+}
 
 
 def tach(ten, nguon, khung, cao, hinh_chac):
@@ -86,7 +102,9 @@ def tach(ten, nguon, khung, cao, hinh_chac):
     rgba = rgba.crop(rgba.getbbox())
     rgba = rgba.resize((round(rgba.width * cao / rgba.height), cao), Image.LANCZOS)
     RA.mkdir(parents=True, exist_ok=True)
-    rgba.save(RA / f"{ten}.png", optimize=True)
+    # lưu PNG 256 màu (có lớp trong suốt): nhẹ đi khoảng 4–5 lần, nhìn không khác
+    rgba.quantize(colors=256, method=Image.Quantize.FASTOCTREE,
+                  dither=Image.Dither.FLOYDSTEINBERG).save(RA / f"{ten}.png", optimize=True)
     print(f"{ten}.png  {rgba.size}  {(RA / f'{ten}.png').stat().st_size // 1024} KB")
     return rgba
 

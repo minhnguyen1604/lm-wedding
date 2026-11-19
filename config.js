@@ -23,6 +23,8 @@ window.THIEP = {
     // Cảnh cầu hôn (chú rể đội mũ cầm nhẫn bước tới cô dâu) nếu muốn dùng lại:
     //   hinhMo: { chuRe: "images/lego/chu-re-nhan.png", coDau: "images/lego/co-dau-hoa.png" },
     hinhMo: null,
+    // Cuối thiệp: chú rể bế cô dâu (tách từ nguon/lego-doi-be.jpg). Để null thì dùng `hinh`.
+    hinhCuoi: { doi: "images/lego/doi-be.png" },
     // File nhạc, ví dụ "audio/canon-in-d.mp3". Để "" thì không có nhạc và không có đĩa nhạc.
     nhac: "audio/canon-in-d.mp3",
   },
@@ -43,6 +45,8 @@ window.THIEP = {
     diaChi: "44B Lý Thường Kiệt, Phường Cửa Nam, Hà Nội",
     // Từ khoá để ghim trên Google Maps (tên + địa chỉ), hoặc toạ độ "21.0288,105.8525"
     ghimBanDo: "Khách sạn Meliá Hanoi, 44B Lý Thường Kiệt, Hà Nội",
+    // Mã nhúng chính thức của Google Maps (Chia sẻ → Nhúng bản đồ → lấy phần src). Để "" thì dùng ghimBanDo ở trên.
+    banDoNhung: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.207346293652!2d105.8483808!3d21.024388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab939165e8d9%3A0xf3952b1fa755bdcc!2sMeli%C3%A1%20Hanoi!5e0!3m2!1svi!2svn!4v1795060702224!5m2!1svi!2svn",
   },
 
   // 3) XÁC NHẬN THAM DỰ — khách điền trên thiệp, dữ liệu ghi về Google Sheet qua một Google Form

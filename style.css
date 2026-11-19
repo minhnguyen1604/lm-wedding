@@ -1,4 +1,5 @@
 :root {
+  color-scheme: only light;   /* không cho trình duyệt (Android, Zalo chế độ tối) tự đảo màu thiệp */
   --kem: #f7f2e7;        /* nền kem */
   --kem-ngoai: #ebe4d3;  /* phần ngoài cột thiệp khi xem trên máy tính */
   --reu: #7b8459;        /* xanh rêu của nét vẽ */
@@ -56,7 +57,7 @@ body {
 .trang {
   width: min(100%, var(--rong));
   margin: 0 auto;
-  padding: 0 var(--le) calc(40px + env(safe-area-inset-bottom));
+  padding: 0 var(--le) calc(90px + env(safe-area-inset-bottom));   /* chừa chỗ cho đĩa nhạc ở cuối trang */
   overflow: hidden;
 }
 
@@ -140,6 +141,15 @@ body {
   color: var(--reu);
 }
 .khung .cho-trong { aspect-ratio: 2 / 3; }
+/* Khung thiệp lúc ảnh đang tải: chỉ là khung trống nhẹ, ánh sáng lướt qua */
+.cho-trong.cho-anh {
+  border: 1px solid var(--reu-nhat);
+  background: linear-gradient(100deg, rgba(255,253,248,.55) 30%, rgba(255,253,248,.95) 50%, rgba(255,253,248,.55) 70%) 0 0 / 300% 100%;
+  animation: anh-dang-tai 1.6s linear infinite;
+}
+.cho-trong.cho-anh.loi { animation: none; cursor: pointer; background: rgba(255,253,248,.8); }
+@keyframes anh-dang-tai { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .cho-trong.cho-anh { animation: none; } }
 .cho-trong b {
   font-size: 30px;
   font-weight: 400;
@@ -515,6 +525,9 @@ textarea.xn-o {
 }
 
 .ket .hoa-van { margin: 0 auto 18px; }
+/* đường kẻ trang trí nằm dưới chân đôi lego, như mặt đất chỗ hai người đứng */
+.ket .doi-nhay { margin-bottom: 4px; }
+.ket .hoa-van-chan { margin: 0 auto 6px; }
 .ket p { margin: 0; }
 .ket p:empty { display: none; }
 
@@ -586,6 +599,10 @@ textarea.xn-o {
 .doi-anh.dang-di .co-dau { animation: lac-lu 0.34s ease-in-out infinite alternate-reverse; }
 /* Một ảnh chung cho cả đôi: cao hơn vì gồm hai người, lúc "bước đi" thì nhún nhảy nhẹ cả đôi */
 .doi-chung .doi-mot { height: calc(var(--bb-rong) * 1.95); }
+/* Cuối thiệp: cô dâu đứng bên trái chú rể, hai ảnh riêng đứng cạnh nhau */
+#doi-cuoi.doi-anh:not(.doi-chung) { gap: calc(var(--bb-rong) * .1); }
+#doi-cuoi .co-dau { order: -1; }
+#doi-cuoi.doi-anh .bup-be:not(.doi-mot) { height: calc(var(--bb-rong) * 1.8); }
 .doi-anh.dang-di .doi-mot { animation: lac-lu 0.34s ease-in-out infinite alternate; }
 @keyframes lac-lu {
   from { transform: rotate(-3.5deg) translateY(0); }
@@ -630,10 +647,18 @@ textarea.xn-o {
   z-index: 20;
   display: grid;
   place-items: center;
+  align-items: safe center;      /* nội dung cao hơn màn hình thì bắt đầu từ trên, không bị cắt mất đầu */
   background: var(--kem-ngoai);
   transition: opacity .9s ease, visibility .9s;
+  overflow-y: auto;              /* màn thấp (điện thoại xoay ngang) vẫn cuộn tới được nút Mở thiệp */
+  overscroll-behavior: contain;
 }
 .bia[hidden] { display: none; }
+/* Màn mở thiệp hiện ngay từ đầu (trước khi script.js tải xong) để khách không thấy nội dung thiệp chớp qua;
+   phần chữ và hình chờ script điền xong mới hiện. */
+html.cho-bia .bia[hidden] { display: grid; }
+html.cho-bia .bia-vom { visibility: hidden; }
+html.cho-bia .bia-vom > * { animation-play-state: paused; }
 .bia.dang-dong {
   opacity: 0;
   visibility: hidden;
@@ -656,7 +681,7 @@ textarea.xn-o {
   z-index: 1;
   display: flex;
   width: min(100%, var(--rong));
-  height: 100%;
+  min-height: 100%;
   padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
 }
 
@@ -676,6 +701,7 @@ textarea.xn-o {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  justify-content: safe center;
   gap: clamp(6px, 1.5vh, 14px);
   padding: 12px 8px;
   text-align: center;
@@ -806,6 +832,9 @@ textarea.xn-o {
   cursor: pointer;
 }
 .dia[hidden] { display: none; }
+/* Đĩa nhạc đang nằm đè lên nút bấm, ô điền: mờ đi và cho chạm xuyên qua để khách bấm đúng nút bên dưới */
+.dia { transition: opacity .25s ease; }
+.dia.nhuong { opacity: .28; pointer-events: none; }
 .dia svg {
   display: block;
   width: 100%;
@@ -904,4 +933,13 @@ body.khoa-cuon { overflow: hidden; }
   :root { --le: 14px; }
   .tieu-de h2 { font-size: 38px; }
   .ban-do { height: 280px; }
+}
+
+/* Điện thoại xoay ngang (màn thấp): thu nhỏ các phần của màn mở thiệp cho vừa một màn hình */
+@media (orientation: landscape) and (max-height: 520px) {
+  .bia .bia-trong { padding-top: 8px; padding-bottom: 8px; }
+  .bia .bia-vom { gap: 2px; padding: 2px 8px; }
+  .bia .bia-logo { width: 58px; margin-bottom: 0; }
+  .bia .bia-ten { font-size: 30px; margin-top: 0; line-height: 1.15; }
+  .bia .bia-doi.doi-anh { --bb-rong: 50px; }
 }

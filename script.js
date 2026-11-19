@@ -50,20 +50,35 @@
   (C.thiep || []).forEach(function (src, i) {
     var khung = document.createElement("figure");
     khung.className = "khung";
-    var trong = choTrong("Khung " + (i + 1), "Ảnh thiết kế thiệp sẽ đặt ở đây");
+    // Lúc ảnh đang tải: khung trống nhẹ nhàng (không chữ)
+    var trong = document.createElement("div");
+    trong.className = "cho-trong cho-anh";
     khung.appendChild(trong);
     dsKhung.appendChild(khung);
     theoDoi(khung);
 
-    // Có ảnh thật thì thay khung trống bằng ảnh
     var img = new Image();
     img.alt = "Thiệp cưới – trang " + (i + 1);
+    var lanThu = 0;
     img.onload = function () {
       khung.replaceChild(img, trong);
       img.addEventListener("click", function () {
         var ds = Array.prototype.map.call(dsKhung.querySelectorAll("img"), function (x) { return x.src; });
         moAnh(ds, ds.indexOf(img.src));
       });
+    };
+    // Mạng chập chờn: tự tải lại một lần; vẫn lỗi thì mời khách chạm để thử lại
+    img.onerror = function () {
+      lanThu++;
+      if (lanThu === 1) { setTimeout(function () { img.src = src + "?thu=1"; }, 2000); return; }
+      trong.classList.add("loi");
+      trong.textContent = "Chưa tải được ảnh thiệp. Xin chạm để thử lại.";
+      trong.onclick = function () {
+        trong.onclick = null;
+        trong.classList.remove("loi");
+        trong.textContent = "";
+        img.src = src + "?thu=" + (++lanThu);
+      };
     };
     img.src = src;
   });
@@ -77,7 +92,7 @@
   $("dd-dia-chi").textContent = dd.diaChi || "";
   if (ghim) {
     var q = encodeURIComponent(ghim);
-    $("dd-map").src = "https://www.google.com/maps?q=" + q + "&z=16&hl=vi&output=embed";
+    $("dd-map").src = dd.banDoNhung || ("https://www.google.com/maps?q=" + q + "&z=16&hl=vi&output=embed");
     $("dd-chi-duong").href = "https://www.google.com/maps/dir/?api=1&destination=" + q;
   }
 
@@ -167,7 +182,12 @@
       nutGui.disabled = true;
       nutGui.textContent = "Đang gửi…";
       // Google Form không cho trang khác đọc phản hồi (no-cors), nên chỉ biết được là đã gửi đi
-      fetch(xn.formUrl, { method: "POST", mode: "no-cors", body: duLieu })
+      // Mạng yếu: quá 15 giây chưa gửi xong thì báo để khách thử lại, không để nút treo mãi
+      var huy = window.AbortController ? new AbortController() : null;
+      var hetGio = new Promise(function (_, tuChoi) {
+        setTimeout(function () { if (huy) huy.abort(); tuChoi(new Error("het-gio")); }, 15000);
+      });
+      Promise.race([fetch(xn.formUrl, { method: "POST", mode: "no-cors", body: duLieu, signal: huy ? huy.signal : undefined }), hetGio])
         .then(function () {
           try { localStorage.setItem(KHOA, JSON.stringify({ coDen: coDen })); } catch (loi) { /* không lưu được cũng không sao */ }
           hienCamOn(coDen);
@@ -481,6 +501,26 @@
     dia.addEventListener("click", function () {
       if (nhac.paused) phatNhac(); else nhac.pause();
     });
+    // Đĩa nhạc nằm đè lên nút bấm / ô điền thì mờ đi và cho chạm xuyên qua (khách bấm đúng nút bên dưới)
+    var choKiemTra = false;
+    var kiemTraDe = function () {
+      choKiemTra = false;
+      var d = dia.getBoundingClientRect();
+      var de = Array.prototype.some.call(
+        document.querySelectorAll(".trang button, .trang a, .trang input, .trang textarea, .trang label, .trang iframe, .trang img"),
+        function (el) {
+          var r = el.getBoundingClientRect();
+          return r.width && r.right > d.left - 4 && r.left < d.right + 4 && r.bottom > d.top - 4 && r.top < d.bottom + 4;
+        });
+      dia.classList.toggle("nhuong", de);
+    };
+    var henKiemTra = function () {
+      if (!choKiemTra) { choKiemTra = true; requestAnimationFrame(kiemTraDe); }
+    };
+    window.addEventListener("scroll", henKiemTra, { passive: true });
+    window.addEventListener("resize", henKiemTra);
+    document.addEventListener("thiep-da-mo", function () { setTimeout(henKiemTra, 1100); });
+    henKiemTra();
     // Khách chuyển sang ứng dụng khác thì tạm dừng, quay lại thì phát tiếp
     var tamDung = false;
     document.addEventListener("visibilitychange", function () {
@@ -515,7 +555,8 @@
       { t: 1850, x: .5, y: .26, to: 1.5 }
     ];
     var BAY = 420;                 // ms tên lửa bay lên trước khi nổ
-    var tenLua = [], hat = [], batDau = null, daGoiXong = false;
+    var VET_MS = 270;              // độ dài vệt liễu tính theo thời gian (như nhau trên màn 60Hz hay 120Hz)
+    var tenLua = [], hat = [], batDau = null, truoc = null, daGoiXong = false, dangChay = 0, daDung = false;
 
     function chon(ds) { return ds[Math.floor(Math.random() * ds.length)]; }
 
@@ -526,7 +567,7 @@
         var g = Math.PI * 2 * i / so + Math.random() * .1, n = (3.1 + Math.random() * 1.1) * to;
         hat.push({ x: x, y: y, vx: Math.cos(g) * n, vy: Math.sin(g) * n, song: 1,
           giam: .0062 + Math.random() * .0022, keo: .962, roi: .032, r: 1.6,
-          mau: chon(VANG), dau: chon(VANG_SANG), vet: [], dai: 16 });
+          mau: chon(VANG), dau: chon(VANG_SANG), vet: [] });
       }
       // kim tuyến: hạt nhỏ lấp lánh, rơi chậm, sống lâu
       for (var k = 0; k < 46 * to; k++) {
@@ -540,8 +581,12 @@
     }
 
     function khung(luc) {
-      if (batDau === null) batDau = luc;
+      if (daDung) return;
+      if (batDau === null) { batDau = luc; truoc = luc; }
       var da = luc - batDau;
+      // k = số "khung 60Hz" đã trôi qua: chuyển động tính theo thời gian thật, không theo số khung hình
+      var k = Math.min(3, Math.max(.25, (luc - truoc) / 16.667));
+      truoc = luc;
 
       lich.forEach(function (p) {
         if (!p.daBan && da >= p.t) {
@@ -553,24 +598,25 @@
 
       ctx.clearRect(0, 0, W, H);
       ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
       // tên lửa: chấm sáng bay lên kéo vệt, rắc tia lửa
       tenLua = tenLua.filter(function (t) {
-        var k = Math.min(1, (da - t.batDau) / BAY), e = 1 - Math.pow(1 - k, 3);
+        var tl = Math.min(1, (da - t.batDau) / BAY), e = 1 - Math.pow(1 - tl, 3);
         var x = t.x + (t.dx - t.x) * e, y = t.y + (t.dy - t.y) * e, e2 = Math.max(0, e - .22);
         ctx.globalAlpha = .55; ctx.strokeStyle = "#c99a3a"; ctx.lineWidth = 1.6;
         ctx.beginPath(); ctx.moveTo(t.x + (t.dx - t.x) * e2, t.y + (t.dy - t.y) * e2); ctx.lineTo(x, y); ctx.stroke();
         ctx.globalAlpha = 1; ctx.fillStyle = "#d9ad4f";
         ctx.beginPath(); ctx.arc(x, y, 2, 0, 6.2832); ctx.fill();
-        if (Math.random() < .7) hat.push({ x: x, y: y, vx: (Math.random() - .5) * .6, vy: .4 + Math.random() * .6,
+        if (Math.random() < .7 * k) hat.push({ x: x, y: y, vx: (Math.random() - .5) * .6, vy: .4 + Math.random() * .6,
           song: .8, giam: .03, keo: .97, roi: .02, r: .9, mau: chon(VANG_SANG), kim: true, pha: Math.random() * 6 });
-        if (k >= 1) { no(t.dx, t.dy, t.to); return false; }
+        if (tl >= 1) { no(t.dx, t.dy, t.to); return false; }
         return true;
       });
 
       // hạt pháo
       hat = hat.filter(function (h) {
-        h.song -= h.giam;
+        h.song -= h.giam * k;
         if (h.song <= 0) return false;
         if (h.chop) {                       // chớp sáng: quầng tròn mờ dần
           var q = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, h.r);
@@ -580,26 +626,32 @@
           ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.2832); ctx.fill();
           return true;
         }
-        h.vx *= h.keo;
-        h.vy = h.vy * h.keo + h.roi;
-        h.x += h.vx;
-        h.y += h.vy;
+        var keo = Math.pow(h.keo, k);
+        h.vx *= keo;
+        h.vy = h.vy * keo + h.roi * k;
+        h.x += h.vx * k;
+        h.y += h.vy * k;
         if (h.kim) {                        // kim tuyến: nhấp nháy theo nhịp riêng
-          h.pha += .45;
+          h.pha += .45 * k;
           ctx.globalAlpha = h.song * (.35 + .65 * Math.abs(Math.sin(h.pha)));
           ctx.fillStyle = h.mau;
           ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.2832); ctx.fill();
           return true;
         }
-        // vệt liễu: nhớ các vị trí cũ, vẽ nhạt dần về phía đuôi
-        h.vet.push(h.x, h.y);
-        if (h.vet.length > h.dai * 2) h.vet.splice(0, 2);
-        var n = h.vet.length / 2;
+        // vệt liễu: nhớ các vị trí trong VET_MS vừa qua, vẽ ba đoạn nhạt dần về phía đuôi
+        // (ba lệnh vẽ cho mỗi vệt thay vì mười mấy, đỡ nặng cho điện thoại cũ)
+        var v = h.vet;
+        v.push(h.x, h.y, da);
+        while (v.length > 6 && v[2] < da - VET_MS) v.splice(0, 3);
+        var n = v.length / 3;
         ctx.strokeStyle = h.mau; ctx.lineWidth = h.r;
-        for (var i = 1; i < n; i++) {
-          ctx.globalAlpha = h.song * (i / n) * .75;
+        for (var doan = 0; doan < 3; doan++) {
+          var tu = Math.floor(doan * (n - 1) / 3), den = Math.floor((doan + 1) * (n - 1) / 3);
+          if (den <= tu) continue;
+          ctx.globalAlpha = h.song * (doan + 1) / 3 * .75;
           ctx.beginPath();
-          ctx.moveTo(h.vet[2 * i - 2], h.vet[2 * i - 1]); ctx.lineTo(h.vet[2 * i], h.vet[2 * i + 1]);
+          ctx.moveTo(v[3 * tu], v[3 * tu + 1]);
+          for (var i = tu + 1; i <= den; i++) ctx.lineTo(v[3 * i], v[3 * i + 1]);
           ctx.stroke();
         }
         // gần tàn thì đầu vệt lấp lánh; quầng mờ cho cảm giác phát sáng
@@ -615,10 +667,12 @@
 
       // gần hết thì cho màn mở thiệp mờ dần cùng tàn pháo
       if (!daGoiXong && da > 3400) { daGoiXong = true; if (xong) xong(); }
-      if (da < 2400 || hat.length || tenLua.length) requestAnimationFrame(khung);
+      if (da < 2400 || hat.length || tenLua.length) dangChay = requestAnimationFrame(khung);
       else { ctx.clearRect(0, 0, W, H); if (!daGoiXong && xong) { daGoiXong = true; xong(); } }
     }
-    requestAnimationFrame(khung);
+    dangChay = requestAnimationFrame(khung);
+    // trả về hàm dừng hẳn (khi khách bấm bỏ qua phần diễn)
+    return function () { daDung = true; cancelAnimationFrame(dangChay); ctx.clearRect(0, 0, W, H); };
   }
 
   /* ---------- Chạm vào đôi lego cuối thiệp: bắn một chùm tim ---------- */
@@ -696,18 +750,21 @@
     datDoi(biaDoi, mt.hinhMo || mt.hinh);
     if (mt.hinhMo && mt.hinhMo.chuRe) biaDoi.classList.add("cau-hon");
     bia.hidden = false;
+    document.documentElement.classList.remove("cho-bia");
     document.body.classList.add("khoa-cuon");
 
     // Đôi búp bê nắm tay ở cuối thiệp, đung đưa theo nhạc
-    datDoi($("doi-cuoi"), mt.hinh);
+    datDoi($("doi-cuoi"), mt.hinhCuoi || mt.hinh);
     $("doi-cuoi").classList.add("nam-tay");
     $("doi-cuoi").hidden = false;
     $("doi-cuoi").addEventListener("click", function () { banTim($("doi-cuoi")); });
 
-    var daMo = false, daXong = false;
+    var daMo = false, daXong = false, henGio = [], dungPhao = null;
     var dongBia = function () {
       if (daXong) return;
       daXong = true;
+      henGio.forEach(clearTimeout);                // bỏ qua phần diễn thì dừng hẳn pháo hoa, không chạy ngầm
+      setTimeout(function () { if (dungPhao) dungPhao(); }, 950);
       bia.classList.add("dang-dong");
       document.body.classList.remove("khoa-cuon");
       setTimeout(function () { bia.hidden = true; }, 1000);
@@ -720,17 +777,18 @@
       biaNut.classList.add("an");
       if (giamChuyenDong) { dongBia(); return; }
       biaDoi.classList.add("gan", "dang-di");      // hai búp bê bước lại gần nhau
-      setTimeout(function () {
+      henGio.push(setTimeout(function () {
         biaDoi.classList.remove("dang-di");
         biaDoi.classList.add("nam-tay");           // nắm tay
-      }, 1300);
-      setTimeout(function () {
-        phaoHoa($("bia-phao"), dongBia);
-      }, 1650);
+      }, 1300));
+      henGio.push(setTimeout(function () {
+        dungPhao = phaoHoa($("bia-phao"), dongBia);
+      }, 1650));
       // Phòng khi máy tạm dừng hoạt ảnh (tiết kiệm pin, chuyển ứng dụng): vẫn tự mở thiệp sau ~6 giây
-      setTimeout(dongBia, 6000);
+      henGio.push(setTimeout(dongBia, 6000));
     };
     biaNut.addEventListener("click", function (e) { e.stopPropagation(); moThiep(); });
-    bia.addEventListener("click", function () { if (daMo) dongBia(); });
+    // Chạm vào chỗ nào trên màn mở thiệp cũng mở (lần nữa thì bỏ qua phần diễn)
+    bia.addEventListener("click", moThiep);
   }
 })();

@@ -1,4 +1,5 @@
-"""Tô logo LM (images/logo-lm.png, bản xám) thành vàng ánh kim, ghi images/logo-lm-vang.png.
+"""Tô logo LM (images/logo-lm.png, bản xám) thành vàng ánh kim, ghi images/logo-lm-vang.png,
+rồi tạo biểu tượng tab images/icon-32.png và icon-180.png (iPhone).
 
 Màu chuyển từ vàng sáng ở trên xuống vàng đậm ở dưới, có một dải sáng nhẹ (giống ép nhũ).
 Muốn sáng/trầm hơn thì sửa ba màu TREN, GIUA, DUOI và độ sáng SANG.
@@ -27,3 +28,14 @@ ra[..., :3] = np.broadcast_to(mau, (H, W, 3))
 ra[..., 3] = anh[..., 3]
 Image.fromarray(ra.astype(np.uint8)).save(GOC / "images/logo-lm-vang.png", optimize=True)
 print("images/logo-lm-vang.png", (W, H))
+
+# Biểu tượng trên tab trình duyệt (32 px) và khi lưu ra màn hình chính iPhone (180 px): logo vàng trên nền kem
+logo = Image.open(GOC / "images/logo-lm-vang.png")
+logo = logo.crop(logo.getbbox())
+for co, le in ((32, 2), (180, 26)):
+    nen = Image.new("RGBA", (co, co), (247, 242, 231, 255))
+    l = logo.copy()
+    l.thumbnail((co - 2 * le, co - 2 * le), Image.LANCZOS)
+    nen.alpha_composite(l, ((co - l.width) // 2, (co - l.height) // 2))
+    nen.convert("RGB").save(GOC / f"images/icon-{co}.png", optimize=True)
+    print(f"images/icon-{co}.png")

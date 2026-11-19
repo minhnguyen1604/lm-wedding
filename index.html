@@ -7,6 +7,14 @@
   <meta name="description" content="Trân trọng kính mời Quý khách đến dự tiệc cưới của Tuấn Minh &amp; Tú Linh.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#f6f1e6">
+  <meta name="color-scheme" content="only light">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/icon-32.png">
+  <link rel="apple-touch-icon" href="images/icon-180.png">
+  <!-- Màn mở thiệp hiện ngay từ đầu; nếu script.js không tải được thì sau 8 giây tự bỏ để khách vẫn xem được thiệp -->
+  <script>
+    document.documentElement.classList.add("cho-bia");
+    setTimeout(function () { document.documentElement.classList.remove("cho-bia"); }, 8000);
+  </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="L&amp;M Wedding Ceremony Invitation">
   <meta property="og:description" content="Trân trọng kính mời Quý khách đến dự tiệc cưới của Tuấn Minh &amp; Tú Linh.">
@@ -175,13 +183,13 @@
     </section>
 
     <footer class="ket cuon">
-      <svg class="hoa-van" viewBox="0 0 120 12" aria-hidden="true">
+      <div class="doi doi-nhay" id="doi-cuoi" aria-hidden="true" hidden></div>
+      <svg class="hoa-van hoa-van-chan" viewBox="0 0 120 12" aria-hidden="true">
         <path d="M0 6h44M76 6h44" stroke="currentColor" stroke-width=".8"/>
         <path d="M60 1.5 64.5 6 60 10.5 55.5 6z" fill="none" stroke="currentColor" stroke-width=".8"/>
         <circle cx="50" cy="6" r="1" fill="currentColor"/>
         <circle cx="70" cy="6" r="1" fill="currentColor"/>
       </svg>
-      <div class="doi doi-nhay" id="doi-cuoi" aria-hidden="true" hidden></div>
       <p id="loi-ket"></p>
     </footer>
   </main>

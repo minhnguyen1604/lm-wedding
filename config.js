@@ -94,6 +94,7 @@ window.THIEP = {
     "images/gallery/12.jpg",
     "images/gallery/13.jpg",
     "images/gallery/14.jpg",
+    "images/gallery/15.jpg",
   ],
 
   // Dòng chữ cuối trang (để "" thì không hiện)

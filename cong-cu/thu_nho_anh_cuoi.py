@@ -18,7 +18,7 @@ GOC = Path(__file__).resolve().parent.parent
 NGUON = Path(sys.argv[1]) if len(sys.argv) > 1 else GOC / "nguon" / "anh-cuoi-moi"
 DICH = GOC / "images" / "gallery"
 
-# Thứ tự album (14 ảnh): trộn đều ảnh đôi, ảnh cô dâu (studio hoa), ảnh chú rể và ảnh chi tiết,
+# Thứ tự album (15 ảnh): trộn đều ảnh đôi, ảnh cô dâu (studio hoa), ảnh chú rể và ảnh chi tiết,
 # mở đầu bằng ảnh hai người, ảnh chú rể một mình không đứng đầu và không đứng gần nhau.
 # Bộ ảnh cũ (6 ảnh) vẫn ở nguon/anh-cuoi/: chạy `python cong-cu/thu_nho_anh_cuoi.py nguon/anh-cuoi` để dùng lại.
 THU_TU = [
@@ -36,6 +36,7 @@ THU_TU = [
     "0756d918-adc7-4abb-8e9c-fc3516e0d9c6.jpeg",   # chú rể cầm hoa
     "f66a86a4-1a6d-4753-8b0e-3729e3d46042.jpeg",   # hai người trong quán, tường cam
     "5ebd9def-c657-46c4-af99-11a668fc33bf.jpeg",   # cô dâu, toàn cảnh studio hoa
+    "999a021232e2b2bcebf3.jpg",                    # hai người nắm tay xoay điệu nhảy trên bãi cỏ (khép lại album)
 ]
 
 co_san = sorted(p.name for p in NGUON.iterdir() if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp"))

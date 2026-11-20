@@ -138,7 +138,7 @@ if DOI_COT:
 #     phong-chu/PhotographSignature.otf — thư mục này không đưa lên GitHub).
 #     Phông vẽ nhầm chữ "ý" thành dấu mũ nên ghép chữ "y" với dấu sắc lấy từ chữ "á" của chính phông.
 PHONG_CHU_KY = GOC / "phong-chu" / "PhotographSignature.otf"
-CO_CHU_KY, DAY_CHU_KY = 76, 236     # cỡ chữ và hàng chân chữ (dòng chấm ở hàng 237)
+CO_CHU_KY, DAY_CHU_KY = 90, 237     # cỡ chữ và hàng chân chữ (dòng chấm ở hàng 237)
 if not PHONG_CHU_KY.exists():
     sys.exit(f"Thiếu phông {PHONG_CHU_KY} — tải theo hướng dẫn ở mục 2c trong file này.")
 
@@ -169,6 +169,16 @@ def lop_quy_khach(f, rong, cao, x, day):
     l[y0:y0 + sac.shape[0], x0:x0 + sac.shape[1]] = np.maximum(vung, sac)
     return Image.fromarray(l.astype(np.uint8))
 
+
+# Chữ "Quý khách" cỡ to cần thêm chỗ phía trên: đẩy dòng "TRÂN TRỌNG KÍNH MỜI" lên DAY_LEN điểm ảnh
+# (vùng này chỉ có chữ trên nền trắng, hoa rum nằm bên phải nên không bị ảnh hưởng)
+DAY_LEN, VUNG_TRAN_TRONG = 14, (88, 112, 448, 172)
+if DAY_LEN:
+    x0, y0, x1, y1 = VUNG_TRAN_TRONG
+    dong = mat_sau.crop((x0, y0, x1, y1))
+    nen_trang = Image.new("RGB", dong.size, tuple(int(v) for v in np.median(np.asarray(dong).reshape(-1, 3), axis=0)))
+    mat_sau.paste(nen_trang, (x0, y0))
+    mat_sau.paste(dong, (x0, y0 - DAY_LEN))
 
 K = 4
 f = ImageFont.truetype(str(PHONG_CHU_KY), CO_CHU_KY * K)

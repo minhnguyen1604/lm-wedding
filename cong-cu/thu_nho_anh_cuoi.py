@@ -29,7 +29,7 @@ THU_TU = [
     "77a709b0-bad7-4aa1-96d6-35b0d1175740.jpeg",   # hai người dạo bước, quán ngoài trời
     "da202839-0634-47b5-856e-720fcbca8782.jpeg",   # chú rể trên bãi cỏ
     "c104407c-46ec-4900-b209-914e11ebca17.jpeg",   # cô dâu ngồi giữa hoa
-    "612acdc6-029f-4800-9409-39d66605b416.jpeg",   # ảnh đen trắng hai người
+    "c9164f4300b280ecd9a3.jpg",                    # hai người dưới ô trong suốt (ảnh màu, thay ảnh đen trắng)
     "261fb844-6c7a-46b3-98a7-39daedd5d534.jpeg",   # cận bó hoa
     "5092bcec-c5a6-42cf-8a7f-12d1235d0fc6.jpeg",   # cô dâu quay lưng, studio hoa
     "67a378c1-af4b-4da0-95bf-c162b4d80cb1.jpeg",   # hai người qua gương cầu

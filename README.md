@@ -12,7 +12,7 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
 1. **Màn mở thiệp**: logo LM vàng đồng, "Save the date" (phông Pinyon Script, màu nâu xám nhạt), ngày 02.01.2027, đôi lego và nút "Mở thiệp".
    Chạm vào thì đôi lego nhún nhảy, pháo hoa kiểu liễu vàng nổ (một màu vàng kim cùng màu logo, 11 chùm, vệt rủ như cành liễu, kim tuyến, ba chùm kết),
    nhạc Sugar (Maroon 5) bắt đầu. Màn này luôn tự đóng sau ~6 giây kể cả khi máy tạm dừng hoạt ảnh.
-2. **Hai mặt thiệp** cắt từ bản duyệt in: mặt lời mời (nội dung như bản duyệt mới `nguon/ban-duyet-in-mat-sau.jpeg`: "TÚ LINH" trước, Nhà gái bên trái — nhưng làm từ bản duyệt chung cho nét; có chữ "QUÝ KHÁCH" in hoa đậm nghiêng trên dòng chấm)
+2. **Hai mặt thiệp** cắt từ bản duyệt in: mặt lời mời (nội dung như bản duyệt mới `nguon/ban-duyet-in-mat-sau.jpeg`: "TÚ LINH" trước, Nhà gái bên trái — nhưng làm từ bản duyệt chung cho nét; có chữ "Quý khách" viết bằng phông chữ ký Photograph Signature trên dòng chấm)
    và mặt chương trình tiệc cưới (đã bỏ mã QR). Chạm vào để phóng to.
 3. **Xác nhận tham dự**: chọn "Sẽ tham dự" thì hiện họ tên, số người, khách nhà trai/gái, lời chúc;
    chọn "Không thể tham dự" thì chỉ hỏi họ tên. Dữ liệu ghi vào Google Sheet (xem bên dưới).
@@ -95,7 +95,7 @@ Khoảng 1–2 phút sau link công khai đổi theo. Máy nào còn hiện bả
 
 | Script | Việc |
 |---|---|
-| `cat_thiep.py [ảnh duyệt in]` | Cắt 2 mặt thiệp từ `nguon/ban-duyet-in.jpeg`; trên mặt lời mời tự đảo tên Tú Linh lên trước (`DAO_TEN`) và đưa cột Nhà gái sang trái (`DOI_COT`) — vùng chữ khai báo trong file; `DUNG_BAN_RIENG = True` để dùng thẳng bản duyệt riêng mặt sau nếu nhà in gửi file nét; viết "QUÝ KHÁCH", bỏ QR ở mặt chương trình, **kiểm tra QR in trên thiệp khớp link**. Dùng phông Palatino đậm nghiêng có sẵn trên Windows. Khi nhà in gửi bản duyệt mới (cùng bố cục): chép vào `nguon/ban-duyet-in.jpeg` rồi chạy lại. |
+| `cat_thiep.py [ảnh duyệt in]` | Cắt 2 mặt thiệp từ `nguon/ban-duyet-in.jpeg`; trên mặt lời mời tự đảo tên Tú Linh lên trước (`DAO_TEN`) và đưa cột Nhà gái sang trái (`DOI_COT`) — vùng chữ khai báo trong file; `DUNG_BAN_RIENG = True` để dùng thẳng bản duyệt riêng mặt sau nếu nhà in gửi file nét; viết "Quý khách", bỏ QR ở mặt chương trình, **kiểm tra QR in trên thiệp khớp link**. Chữ "Quý khách" dùng phông Photograph Signature (miễn phí dùng cá nhân, không đưa lên GitHub): tải ở FontSpace, giải nén file .otf vào `phong-chu/PhotographSignature.otf` rồi mới chạy. Khi nhà in gửi bản duyệt mới (cùng bố cục): chép vào `nguon/ban-duyet-in.jpeg` rồi chạy lại. |
 | `thu_nho_anh_cuoi.py [thư mục]` | Thu nhỏ ảnh cưới gốc còn cạnh dài 1600 px, bỏ EXIF, ghi `images/gallery/01.jpg…`. Thứ tự sửa trong danh sách `THU_TU`. Nhớ cập nhật `gallery` trong `config.js`. |
 | `tach_nhan_vat.py [tên...]` | Tách các nhân vật trong `images/lego/` khỏi nền tranh bằng GrabCut; khai báo khung và đường bao váy vẽ tay trong `NHAN_VAT`. Ghi PNG 256 màu (nhẹ 4–5 lần) và bản xem thử `_thu/xem-nhan-vat.png`. Có thể chạy vài phút mỗi hình. |
 | `tach_lego_moi.py` | Tách đôi lego đang dùng khỏi nền tranh `nguon/lego-moi-goc.jpg` bằng GrabCut (cần `opencv-python-headless`); đường bao thô vẽ tay cho riêng ảnh này. |

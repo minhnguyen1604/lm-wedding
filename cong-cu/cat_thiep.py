@@ -1,6 +1,6 @@
 """Cắt hai mặt thiệp từ bản duyệt in và ghi vào images/thiep/.
 
-- images/thiep/1.jpg: mặt lời mời, có viết "QUÝ KHÁCH" (in hoa, đậm nghiêng) lên dòng chấm,
+- images/thiep/1.jpg: mặt lời mời, có viết "Quý khách" (phông chữ ký Photograph Signature) lên dòng chấm,
   đảo tên "TÚ LINH" lên trước (DAO_TEN) và đưa cột "NHÀ GÁI" sang bên trái (DOI_COT) — đúng như bản duyệt mới
   nguon/ban-duyet-in-mat-sau.jpeg nhưng giữ độ nét của bản duyệt chung (bản mới chỉ là ảnh chụp màn hình).
 - images/thiep/2.jpg: mặt chương trình tiệc cưới, đã bỏ mã QR và lề trống
@@ -10,7 +10,7 @@ Cách dùng (chạy ở thư mục gốc của repo):
     pip install pillow numpy "qrcode[pil]"
     python cong-cu/cat_thiep.py                       # dùng nguon/ban-duyet-in.jpeg
     python cong-cu/cat_thiep.py nguon/ban-khac.jpeg   # bản duyệt in khác (cùng bố cục)
-Phông chữ: Palatino Linotype đậm nghiêng (C:\\Windows\\Fonts\\palabi.ttf) có sẵn trên Windows.
+Phông chữ "Quý khách": Photograph Signature, đặt ở phong-chu/ (xem mục 2c).
 """
 import sys
 from pathlib import Path
@@ -23,7 +23,6 @@ from qrcode.constants import ERROR_CORRECT_Q
 GOC = Path(__file__).resolve().parent.parent
 NGUON = Path(sys.argv[1]) if len(sys.argv) > 1 else GOC / "nguon" / "ban-duyet-in.jpeg"
 URL = "https://minhnguyen1604.github.io/lm-wedding/"
-PHONG = r"C:\Windows\Fonts\palabi.ttf"    # Palatino đậm nghiêng (bản đứng: palab.ttf)
 MAU_CHU = (58, 62, 49)            # xanh rêu đậm như chữ trên thiệp
 
 ban_in = Image.open(NGUON).convert("RGB")
@@ -133,13 +132,47 @@ if DOI_COT:
     mat_sau = doi_cho(mat_sau, COT_TRAI, COT_PHAI, lambda l, s: l < 205,
                       lambda y: MAU_TIEU_DE if y < HANG_TACH else MAU_TEN_BO_ME, True, cham_le=3)   # giữ dấu nặng (Ặ, Ị, Ạ)
 
-# 2c. Mặt lời mời: viết "QUÝ KHÁCH" lên dòng chấm dưới "TRÂN TRỌNG KÍNH MỜI"
+# 2c. Mặt lời mời: viết "Quý khách" lên dòng chấm dưới "TRÂN TRỌNG KÍNH MỜI"
+#     bằng phông chữ ký Photograph Signature (Typeline Studio, miễn phí dùng cá nhân, không được phát tán lại:
+#     tải ở https://www.fontspace.com/photograph-signature-font-f100912, giải nén file .otf vào
+#     phong-chu/PhotographSignature.otf — thư mục này không đưa lên GitHub).
+#     Phông vẽ nhầm chữ "ý" thành dấu mũ nên ghép chữ "y" với dấu sắc lấy từ chữ "á" của chính phông.
+PHONG_CHU_KY = GOC / "phong-chu" / "PhotographSignature.otf"
+CO_CHU_KY, DAY_CHU_KY = 76, 236     # cỡ chữ và hàng chân chữ (dòng chấm ở hàng 237)
+if not PHONG_CHU_KY.exists():
+    sys.exit(f"Thiếu phông {PHONG_CHU_KY} — tải theo hướng dẫn ở mục 2c trong file này.")
+
+
+def lop_chu(f, chu, rong, cao, x, day):
+    l = Image.new("L", (rong, cao), 0)
+    ImageDraw.Draw(l).text((x, day), chu, font=f, fill=255, anchor="ls")
+    return np.asarray(l).astype(int)
+
+
+def lop_quy_khach(f, rong, cao, x, day):
+    l = lop_chu(f, "Quy khách", rong, cao, x, day)
+    s = f.size
+    w = h = s * 2
+    goc_a = int(h * .75)
+    a1, a0 = lop_chu(f, "á", w, h, s // 2, goc_a), lop_chu(f, "a", w, h, s // 2, goc_a)
+    sac = np.clip(a1 - a0, 0, 255)                   # dấu sắc = chữ á trừ chữ a
+    ys, xs = np.nonzero(sac > 40)
+    sac = sac[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+    # canh dấu trên chữ y giống như trên chữ a: cùng độ cao, cùng độ lệch so với tâm phần thân chữ
+    ca = np.nonzero(a0[goc_a - int(s * .45):goc_a].any(axis=0))[0]
+    lech = (xs.min() + xs.max()) / 2 - (ca.min() + ca.max()) / 2
+    yy = lop_chu(f, "y", rong, cao, x + f.getlength("Qu"), day)
+    cy = np.nonzero(yy[day - int(s * .45):day].any(axis=0))[0]
+    x0 = int(round((cy.min() + cy.max()) / 2 + lech - sac.shape[1] / 2))
+    y0 = day + ys.min() - goc_a
+    vung = l[y0:y0 + sac.shape[0], x0:x0 + sac.shape[1]]
+    l[y0:y0 + sac.shape[0], x0:x0 + sac.shape[1]] = np.maximum(vung, sac)
+    return Image.fromarray(l.astype(np.uint8))
+
+
 K = 4
-f = ImageFont.truetype(PHONG, 29 * K)
-lop = Image.new("L", (mat_sau.width * K, mat_sau.height * K), 0)
-ve = ImageDraw.Draw(lop)
-chan = f.getbbox("QUY KHACH")[3]
-ve.text((98 * K - f.getbbox("QUÝ KHÁCH")[0], (237 - 9) * K - chan), "QUÝ KHÁCH", font=f, fill=255)
+f = ImageFont.truetype(str(PHONG_CHU_KY), CO_CHU_KY * K)
+lop = lop_quy_khach(f, mat_sau.width * K, mat_sau.height * K, 98 * K, DAY_CHU_KY * K)
 lop = lop.resize(mat_sau.size, Image.LANCZOS)
 mat_sau = Image.composite(Image.new("RGB", mat_sau.size, MAU_CHU), mat_sau, lop)
 mat_sau.save(GOC / "images/thiep/1.jpg", quality=90, optimize=True)

@@ -32,6 +32,8 @@ BUI_TOC = [(1190, 68), (1202, 52), (1240, 38), (1278, 50), (1292, 68), (1280, 82
 VAY_BE = [[(345, 185), (398, 178), (410, 250), (345, 262)],
           [(330, 290), (440, 255), (560, 232), (640, 300), (620, 340), (520, 400), (445, 445), (400, 445),
            (380, 350), (332, 322)]]
+# cô dâu cầm que pháo (nguon/lego-co-dau-phao.png): váy trắng gần trùng màu nền
+VAY_CO_DAU_PHAO = [(472, 600), (655, 600), (690, 760), (712, 900), (785, 1265), (290, 1265), (410, 900), (440, 760)]
 VAY_DOI = [(495, 585), (612, 585), (630, 700), (640, 810), (698, 1137), (304, 1137), (420, 770), (470, 700)]
 
 # tên: (ảnh nguồn, khung (x0, y0, x1, y1), chiều cao xuất, đa giác chắc chắn là hình)
@@ -40,6 +42,10 @@ NHAN_VAT = {
     "co-dau-voan":    (BANG, (762, 18, 1074, 468), 420, [VAY_CO_DAU_VOAN]),  # cô dâu đội voan, vẫy tay
     "chu-re-nhan":    (BANG, (196, 490, 452, 936), 420, []),                 # chú rể cầm hộp nhẫn
     "chu-re-vay":     (BANG, (512, 488, 748, 938), 420, []),                 # chú rể ngả mũ vẫy tay
+    # màn ăn mừng sau khi khách gửi xác nhận tham dự: tia pháo ở đầu que và rượu champagne do code vẽ,
+    # nên cắt bỏ chùm pháo vẽ sẵn trên đầu que (khung bắt đầu ngay dưới chùm pháo)
+    "co-dau-phao": ("nguon/lego-co-dau-phao.png", (270, 292, 822, 1285), 520, [VAY_CO_DAU_PHAO]),
+    "chu-re-champagne": ("nguon/lego-chu-re-champagne.png", (345, 190, 890, 1155), 520, []),
     "doi-be": ("nguon/lego-doi-be.jpg", (248, 15, 652, 478), 520, VAY_BE),       # chú rể bế cô dâu (cuối thiệp)
     "co-dau-bui-toc": (BANG, (1128, 28, 1348, 468), 420, [VAY_CO_DAU_BUI, BUI_TOC]),  # cô dâu búi tóc, váy ren (cuối thiệp)
     "chu-re-khoanh-tay": (BANG, (1162, 488, 1322, 940), 420, []),           # chú rể đội mũ khoanh tay (cuối thiệp)
@@ -52,6 +58,8 @@ NHAN_VAT = {
 }
 # Vùng chắc chắn là nền (không thuộc nhân vật) cho từng nhân vật, nếu cần
 NEN_CHAC = {
+    # cây cầu trong tranh nằm sát chai champagne
+    "chu-re-champagne": [[(345, 190), (378, 190), (378, 362), (368, 400), (358, 470), (345, 470)]],
     # bên phải chú rể: trái tim nhỏ và hoa rum của tranh
     "doi-be": [[(565, 15), (652, 15), (652, 225), (588, 225), (570, 150)],
                [(632, 140), (652, 140), (652, 292), (642, 292)]],

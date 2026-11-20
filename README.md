@@ -16,8 +16,10 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
    và mặt chương trình tiệc cưới (đã bỏ mã QR). Chạm vào để phóng to.
 3. **Xác nhận tham dự**: chọn "Sẽ tham dự" thì hiện họ tên, số người, khách nhà trai/gái, lời chúc;
    chọn "Không thể tham dự" thì chỉ hỏi họ tên. Dữ liệu ghi vào Google Sheet (xem bên dưới).
-   Gửi xong hiện đôi lego kèm lời cảm ơn ("Xin cảm ơn Quý khách đã xác nhận tham dự! Rất mong được đón tiếp
-   Quý khách trong ngày vui của gia đình chúng tôi.").
+   Gửi "Sẽ tham dự" thành công thì có màn ăn mừng ~3,5 giây: cô dâu (que pháo) phụt pháo giấy nhiều màu, chú rể lắc chai,
+   nút bật, champagne phụt ra (vẽ bằng canvas, toạ độ đầu que và miệng chai ở `xacNhan.anMung` trong `config.js`),
+   kèm lời cảm ơn ("Xin cảm ơn Quý khách đã xác nhận tham dự! …"). Mở lại thiệp sau đó chỉ hiện hình tĩnh.
+   Nhân vật: `images/lego/co-dau-phao.png`, `chu-re-champagne.png` (tách từ `nguon/lego-co-dau-phao.png`, `nguon/lego-chu-re-champagne.png`).
 4. **Album ảnh cưới** cuộn ngang, 14 ảnh (khung 3:4), tự trôi chậm, chạm để xem to. Dải ảnh dùng bản nhỏ `images/gallery/nho/`, ảnh hai bên chỉ mờ nhẹ, không co giãn (co giãn theo ngón tay làm ảnh rung khi trượt).
 5. **Địa điểm tổ chức**: Khách sạn Meliá Hà Nội, Grand Ballroom tầng 2, 44B Lý Thường Kiệt, bản đồ và nút Chỉ đường.
    Bản đồ dùng mã nhúng chính thức của Google Maps (`diaDiem.banDoNhung` trong `config.js`, lấy ở Chia sẻ → Nhúng bản đồ).

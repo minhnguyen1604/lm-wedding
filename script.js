@@ -115,7 +115,7 @@
       hopLoi.hidden = false;
       if (oCanSua) oCanSua.focus();
     };
-    var hienCamOn = function (coDen) {
+    var hienCamOn = function (coDen, vuaGui) {
       $("xn-cam-on").textContent = coDen
         ? "Xin cảm ơn Quý khách đã xác nhận tham dự! Rất mong được đón tiếp Quý khách trong ngày vui của gia đình chúng tôi."
         : "Xin chân thành cảm ơn Quý khách đã báo tin. Gia đình chúng tôi rất tiếc vì không được đón tiếp Quý khách trong ngày vui, và xin gửi lời chúc sức khoẻ, bình an đến Quý khách cùng gia đình.";
@@ -124,16 +124,28 @@
       var ds = [].concat(anhDap || []);
       var khung = $("xn-hinh");
       khung.innerHTML = "";
-      ds.forEach(function (src) {
+      var anh = ds.map(function (src) {
         var img = new Image();
         img.alt = "";
         img.draggable = false;
         img.src = src;
         khung.appendChild(img);
+        return img;
       });
       khung.hidden = !ds.length;
+      // Có tham dự: hai nhân vật cầm pháo và champagne; vừa gửi xong thì bắn pháo, mở champagne
+      var coAnMung = coDen && xn.anMung && anh.length === 2;
+      khung.classList.toggle("an-mung", !!coAnMung);
       form.hidden = true;
       $("xn-xong").hidden = false;
+      if (coAnMung && vuaGui && !giamChuyenDong) {
+        khung.classList.add("dang-vao");
+        var sanSang = 0;
+        anh.forEach(function (img) {
+          var xong = function () { if (++sanSang === 2) anMung(khung, anh, xn.anMung); };
+          if (img.complete) xong(); else { img.onload = xong; img.onerror = xong; }
+        });
+      }
     };
 
     // Bước 1 chỉ có hai lựa chọn; chọn xong mới hiện phần điền:
@@ -190,8 +202,9 @@
       Promise.race([fetch(xn.formUrl, { method: "POST", mode: "no-cors", body: duLieu, signal: huy ? huy.signal : undefined }), hetGio])
         .then(function () {
           try { localStorage.setItem(KHOA, JSON.stringify({ coDen: coDen })); } catch (loi) { /* không lưu được cũng không sao */ }
-          hienCamOn(coDen);
-          $("xn-cam-on").focus();
+          hienCamOn(coDen, true);
+          $("xn-cam-on").focus({ preventScroll: true });
+          $("xn-xong").scrollIntoView({ behavior: giamChuyenDong ? "auto" : "smooth", block: "center" });
         })
         .catch(function () {
           baoLoi("Chưa gửi được. Xin kiểm tra kết nối mạng rồi thử lại.");
@@ -678,6 +691,136 @@
     dangChay = requestAnimationFrame(khung);
     // trả về hàm dừng hẳn (khi khách bấm bỏ qua phần diễn)
     return function () { daDung = true; cancelAnimationFrame(dangChay); ctx.clearRect(0, 0, W, H); };
+  }
+
+  /* ---------- Màn ăn mừng sau khi khách gửi xác nhận tham dự ---------- */
+  // Cô dâu (ảnh 1) giơ que pháo: đầu que xì tia lửa vàng và phụt ba đợt pháo giấy nhiều màu.
+  // Chú rể (ảnh 2) lắc chai, nút bần bật bay lên, champagne phụt thành tia cong. Toàn bộ khoảng 3,5 giây.
+  function anMung(khung, anh, ch) {
+    var cv = document.createElement("canvas");
+    cv.className = "xn-phao";
+    cv.setAttribute("aria-hidden", "true");
+    khung.appendChild(cv);
+    var ctx = cv.getContext("2d");
+    var tiLe = Math.min(window.devicePixelRatio || 1, 2);
+    var W, H, goc;
+    function doKhung() {
+      var r = cv.getBoundingClientRect();
+      W = r.width; H = r.height;
+      cv.width = W * tiLe; cv.height = H * tiLe;
+      ctx.setTransform(tiLe, 0, 0, tiLe, 0, 0);
+    }
+    // vị trí một điểm (tỉ lệ trên ảnh) trong hệ toạ độ của canvas
+    function diem(img, tl) {
+      var r = img.getBoundingClientRect();
+      goc = cv.getBoundingClientRect();
+      return { x: r.left - goc.left + tl[0] * r.width, y: r.top - goc.top + tl[1] * r.height };
+    }
+    var MAU = ["#e8789a", "#f2c14e", "#4fb3a9", "#a98bd6", "#f29a6b", "#d4a845", "#7cc4e8"];
+    var VANG = ["#f6d77a", "#ffe9a8", "#e9b949", "#fff6d6"];
+    var RUOU = ["#e2c35e", "#edd58a", "#d8b24c", "#f7ebc0"];
+    var hat = [], nut = null, batDau = null, truoc = null, dot = 0, daMoChai = false;
+    function chon(ds) { return ds[Math.floor(Math.random() * ds.length)]; }
+
+    // tia lửa vàng xì liên tục ở đầu que
+    function tiaLua(p, k) {
+      for (var i = 0; i < 5 * k; i++) {
+        var g = Math.random() * 6.283, v = 1 + Math.random() * 2.6;
+        hat.push({ x: p.x, y: p.y, vx: Math.cos(g) * v, vy: Math.sin(g) * v, song: 1, giam: .06 + Math.random() * .05,
+          keo: .9, roi: .05, r: .8 + Math.random() * .8, mau: chon(VANG), vet: true });
+      }
+    }
+    // một đợt pháo giấy nhiều màu phụt lên thành hình nón
+    function phut(p, to) {
+      for (var i = 0; i < 60 * to; i++) {   // hướng chếch vào giữa, phía chú rể
+        var g = -Math.PI / 2 + .22 + (Math.random() - .5) * .95, v = (6.5 + Math.random() * 5) * to;
+        var giay = Math.random() < .7;
+        hat.push({ x: p.x, y: p.y, vx: Math.cos(g) * v, vy: Math.sin(g) * v, song: 1, giam: .0075 + Math.random() * .005,
+          keo: giay ? .955 : .965, roi: giay ? .085 : .1, r: giay ? 3 + Math.random() * 2.4 : 1.4 + Math.random(),
+          mau: chon(MAU), giay: giay, xoay: Math.random() * 6.28, tocXoay: (Math.random() - .5) * .5, lat: Math.random() * 6.28 });
+      }
+    }
+    // tia champagne
+    function ruou(p, hg, k, manh) {
+      for (var i = 0; i < 10 * k * manh; i++) {
+        var lech = (Math.random() - .5) * .38, c = Math.cos(lech), s = Math.sin(lech);
+        var dx = hg[0] * c - hg[1] * s, dy = hg[0] * s + hg[1] * c, v = (5.5 + Math.random() * 4) * manh;
+        var bot = Math.random() < .25;
+        hat.push({ x: p.x, y: p.y, vx: dx * v, vy: dy * v, song: 1, giam: .016 + Math.random() * .01,
+          keo: .975, roi: .16, r: bot ? 1.8 + Math.random() * 2 : 1.4 + Math.random() * 1.5, mau: chon(RUOU), bot: bot });
+      }
+    }
+
+    function khungHinh(luc) {
+      if (batDau === null) { batDau = truoc = luc; }
+      var da = luc - batDau, k = Math.min(3, Math.max(.25, (luc - truoc) / 16.667));
+      truoc = luc;
+      var que = diem(anh[0], ch.dauQue), mieng = diem(anh[1], ch.miengChai), hg = ch.huongChai;
+
+      if (da > 450 && da < 3200) tiaLua(que, k);
+      if (dot < 3 && da > 650 + dot * 420) { phut(que, dot === 2 ? 1.25 : 1); dot++; }
+      if (da > 900 && !daMoChai) anh[1].classList.add("lac-chai");
+      if (da > 1550 && !daMoChai) {
+        daMoChai = true;
+        anh[1].classList.remove("lac-chai");
+        nut = { x: mieng.x, y: mieng.y, vx: hg[0] * 7.5, vy: hg[1] * 9.5, xoay: 0 };
+        for (var i = 0; i < 14; i++) {   // làn bọt nhỏ khi bật nút
+          var g = Math.random() * 6.283;
+          hat.push({ x: mieng.x, y: mieng.y, vx: Math.cos(g) * 1.6, vy: Math.sin(g) * 1.6, song: 1, giam: .04, keo: .9, roi: 0,
+            r: 2 + Math.random() * 2, mau: "#fffaf0", bot: true });
+        }
+      }
+      if (daMoChai && da < 2900) ruou(mieng, hg, k, da < 2000 ? 1 : .55);
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineCap = "round";
+      // nút bần bay theo đường vòng cung, xoay tròn
+      if (nut) {
+        nut.vy += .32 * k; nut.x += nut.vx * k; nut.y += nut.vy * k; nut.xoay += .35 * k;
+        ctx.save(); ctx.translate(nut.x, nut.y); ctx.rotate(nut.xoay);
+        ctx.fillStyle = "#c79a64"; ctx.fillRect(-3.5, -5, 7, 10);
+        ctx.fillStyle = "#a87b48"; ctx.fillRect(-3.5, -5, 7, 2.4);
+        ctx.restore();
+        if (nut.y > H + 20) nut = null;
+      }
+      hat = hat.filter(function (h) {
+        h.song -= h.giam * k;
+        if (h.song <= 0) return false;
+        var keo = Math.pow(h.keo, k);
+        h.vx *= keo; h.vy = h.vy * keo + h.roi * k; h.x += h.vx * k; h.y += h.vy * k;
+        ctx.globalAlpha = Math.min(1, h.song * 1.6);
+        if (h.giay) {                  // mẩu giấy màu: vừa xoay vừa lật
+          h.xoay += h.tocXoay * k; h.lat += .25 * k;
+          ctx.save(); ctx.translate(h.x, h.y); ctx.rotate(h.xoay); ctx.scale(1, Math.cos(h.lat));
+          ctx.fillStyle = h.mau; ctx.fillRect(-h.r, -h.r * .45, h.r * 2, h.r * .9);
+          ctx.restore();
+        } else if (h.vet) {            // tia lửa: vạch ngắn theo hướng bay
+          ctx.strokeStyle = h.mau; ctx.lineWidth = h.r;
+          ctx.beginPath(); ctx.moveTo(h.x - h.vx * 2.2, h.y - h.vy * 2.2); ctx.lineTo(h.x, h.y); ctx.stroke();
+        } else if (h.bot) {            // bọt champagne: vòng tròn có viền vàng
+          ctx.fillStyle = "rgba(255,250,235,.9)"; ctx.strokeStyle = h.mau === "#fffaf0" ? "#e6d39a" : h.mau; ctx.lineWidth = .9;
+          ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.2832); ctx.fill(); ctx.stroke();
+        } else {
+          ctx.fillStyle = h.mau;
+          ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.2832); ctx.fill();
+        }
+        return true;
+      });
+      ctx.globalAlpha = 1;
+      // đầu que còn cháy thì có quầng sáng nhỏ
+      if (da > 450 && da < 3200) {
+        var q = ctx.createRadialGradient(que.x, que.y, 0, que.x, que.y, 14);
+        q.addColorStop(0, "rgba(255,240,190,.95)"); q.addColorStop(1, "rgba(255,220,140,0)");
+        ctx.fillStyle = q; ctx.beginPath(); ctx.arc(que.x, que.y, 14, 0, 6.2832); ctx.fill();
+      }
+      if (da < 3300 || hat.length || nut) requestAnimationFrame(khungHinh);
+      else { cv.remove(); window.removeEventListener("resize", doKhung); }
+    }
+    doKhung();
+    window.addEventListener("resize", doKhung);
+    // đợi hai nhân vật bước vào xong rồi mới bắt đầu
+    setTimeout(function () { requestAnimationFrame(khungHinh); }, 250);
+    setTimeout(function () { khung.classList.remove("dang-vao"); }, 700);
   }
 
   /* ---------- Chạm vào đôi lego cuối thiệp: bắn một chùm tim ---------- */

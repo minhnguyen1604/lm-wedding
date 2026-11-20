@@ -66,7 +66,13 @@ window.THIEP = {
     // Dòng nhắc hạn chót, ví dụ "Xin vui lòng xác nhận trước ngày 20.12.2026" (để "" nếu không cần)
     hanChot: "",
     // Nhân vật lego hiện cùng lời cảm ơn sau khi gửi: một ảnh hoặc danh sách ảnh đứng cạnh nhau ("" nếu không cần)
-    hinhCo: "images/lego/doi-toc-den-toc.png",    // khách sẽ tham dự: cô dâu và chú rể (để tóc) đứng cạnh nhau
+    // khách sẽ tham dự: cô dâu cầm que pháo (trái) và chú rể cầm champagne (phải)
+    hinhCo: ["images/lego/co-dau-phao.png", "images/lego/chu-re-champagne.png"],
+    // Màn ăn mừng ngay sau khi khách GỬI xác nhận "Sẽ tham dự" thành công: que pháo của cô dâu phụt pháo nhiều màu,
+    // chú rể lắc chai, nút bật, champagne phụt ra. Toạ độ tính theo tỉ lệ ảnh (0..1):
+    //   dauQue: đầu que pháo trên ảnh thứ nhất; miengChai: miệng chai trên ảnh thứ hai; huongChai: hướng miệng chai.
+    //   Để anMung: null thì chỉ hiện hai nhân vật đứng yên.
+    anMung: { dauQue: [0.925, 0.006], miengChai: [0.08, 0.177], huongChai: [-0.36, -0.93] },
     hinhKhong: "images/lego/doi-toc-den-toc.png", // khách báo vắng: cũng là đôi để tóc
   },
 

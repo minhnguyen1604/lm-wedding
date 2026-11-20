@@ -396,6 +396,27 @@ textarea.xn-o {
   filter: drop-shadow(0 5px 6px rgba(60, 55, 35, .16));
 }
 .xn-hinh[hidden] { display: none; }
+/* Có tham dự: cô dâu cầm que pháo (trái), chú rể cầm champagne (phải), đứng cách nhau cho pháo và rượu bay vào giữa */
+.xn-hinh.an-mung { position: relative; gap: 34px; margin-top: 18px; }
+.xn-hinh.an-mung img { height: 186px; }
+.xn-hinh.an-mung.dang-vao { animation: none; }
+.xn-hinh.an-mung.dang-vao img:first-child { animation: vao-trai .6s cubic-bezier(.2, .9, .3, 1.2) both; }
+.xn-hinh.an-mung.dang-vao img:last-child { animation: vao-phai .6s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes vao-trai { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
+@keyframes vao-phai { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+/* chú rể lắc chai trước khi bật nút */
+.xn-hinh img.lac-chai { transform-origin: 50% 100%; animation: lac-chai .14s ease-in-out infinite alternate; }
+@keyframes lac-chai { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+/* lớp vẽ pháo và champagne: phủ rộng ra hai bên và lên trên khung */
+.xn-phao {
+  position: absolute;
+  left: -60px;
+  top: -200px;
+  width: calc(100% + 120px);
+  height: calc(100% + 260px);
+  pointer-events: none;
+  z-index: 2;
+}
 @keyframes nhan-vat-ra {
   from { opacity: 0; transform: translateY(18px) scale(.9); }
   to { opacity: 1; transform: none; }

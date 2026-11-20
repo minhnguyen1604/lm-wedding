@@ -826,31 +826,32 @@
   /* ---------- Chạm vào đôi lego cuối thiệp: bắn một chùm tim ---------- */
   var TIM = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
   var MAU_TIM = ["#e2578f", "#f29bb5", "#d98c98", "#c9a24b", "#efc2c9"];
-  function banTim(doi) {
+  // nhe = true: chỉ vài trái tim nhỏ tự bay ra để gợi ý khách chạm vào (không nhún)
+  function banTim(doi, nhe) {
     var ket = doi.parentNode;
     var hopDoi = doi.getBoundingClientRect(), hopKet = ket.getBoundingClientRect();
     var cx = hopDoi.left - hopKet.left + hopDoi.width / 2;
     var cy = hopDoi.top - hopKet.top + hopDoi.height * 0.35;
     // hai nhân vật nhún nhẹ một cái
-    Array.prototype.forEach.call(doi.querySelectorAll(".bup-be"), function (b, i) {
+    if (!nhe) Array.prototype.forEach.call(doi.querySelectorAll(".bup-be"), function (b, i) {
       if (b.animate) b.animate(
         [{ transform: "translateY(0)" }, { transform: "translateY(-12px)" }, { transform: "translateY(0)" }],
         { duration: 420, delay: i * 70, easing: "ease-out" }
       );
     });
     if (giamChuyenDong) return;
-    for (var i = 0; i < 16; i++) {
+    for (var i = 0; i < (nhe ? 3 : 16); i++) {
       var t = document.createElement("span");
       t.className = "tim";
       t.innerHTML = TIM;
-      var co = 12 + Math.random() * 14;
+      var co = nhe ? 8 + Math.random() * 7 : 12 + Math.random() * 14;
       t.style.width = t.style.height = co + "px";
       t.style.left = (cx - co / 2) + "px";
       t.style.top = (cy - co / 2) + "px";
       t.style.color = MAU_TIM[i % MAU_TIM.length];
       ket.appendChild(t);
       var goc = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;     // bay lên, toả ra hai bên
-      var xa = 70 + Math.random() * 90;
+      var xa = nhe ? 40 + Math.random() * 35 : 70 + Math.random() * 90;
       var dx = Math.cos(goc) * xa, dy = Math.sin(goc) * xa;
       var quay = (Math.random() - 0.5) * 60;
       if (!t.animate) { t.remove(); continue; }
@@ -905,7 +906,23 @@
     datDoi($("doi-cuoi"), mt.hinhCuoi || mt.hinh);
     $("doi-cuoi").classList.add("nam-tay");
     $("doi-cuoi").hidden = false;
-    $("doi-cuoi").addEventListener("click", function () { banTim($("doi-cuoi")); });
+    // Gợi ý chạm: khi đôi lego hiện trên màn hình, cứ ~3 giây tự bay ra vài trái tim nhỏ (dưới chân có vòng sáng vàng).
+    // Khách chạm vào là bắn chùm tim lớn; đã chạm rồi thì thôi tự bay (khách đã biết).
+    var doiCuoi = $("doi-cuoi"), henTim = null, daCham = false;
+    var dungGoiY = function () { if (henTim) { clearInterval(henTim); henTim = null; } };
+    doiCuoi.addEventListener("click", function () {
+      daCham = true; dungGoiY(); doiCuoi.classList.add("da-cham");
+      banTim(doiCuoi);
+    });
+    if (!giamChuyenDong && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (ds) {
+        dungGoiY();
+        if (ds[0].isIntersecting && !daCham) {
+          setTimeout(function () { if (!daCham && !document.hidden) banTim(doiCuoi, true); }, 600);
+          henTim = setInterval(function () { if (!document.hidden) banTim(doiCuoi, true); }, 3200);
+        }
+      }, { threshold: 0.6 }).observe(doiCuoi);
+    }
 
     var daMo = false, daXong = false, henGio = [], dungPhao = null;
     var dongBia = function () {

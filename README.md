@@ -23,7 +23,7 @@ Thiệp cưới online của Tuấn Minh & Tú Linh, chạy trên GitHub Pages:
 4. **Album ảnh cưới** cuộn ngang, 14 ảnh (khung 3:4), tự trôi chậm, chạm để xem to. Dải ảnh dùng bản nhỏ `images/gallery/nho/`, ảnh hai bên chỉ mờ nhẹ, không co giãn (co giãn theo ngón tay làm ảnh rung khi trượt).
 5. **Địa điểm tổ chức**: Khách sạn Meliá Hà Nội, Grand Ballroom tầng 2, 44B Lý Thường Kiệt, bản đồ và nút Chỉ đường.
    Bản đồ dùng mã nhúng chính thức của Google Maps (`diaDiem.banDoNhung` trong `config.js`, lấy ở Chia sẻ → Nhúng bản đồ).
-6. **Chú rể bế cô dâu** (lego) đung đưa theo nhạc ở cuối thiệp, đường kẻ trang trí dưới chân (đã bỏ câu kết); **chạm vào bắn ra chùm tim**.
+6. **Chú rể bế cô dâu** (lego) đung đưa theo nhạc ở cuối thiệp, đường kẻ trang trí dưới chân (đã bỏ câu kết); **chạm vào bắn ra chùm tim**. Gợi ý chạm: khi cuộn tới, cứ ~3 giây tự bay ra vài tim nhỏ, dưới chân có vòng sáng vàng; khách chạm rồi thì thôi gợi ý (thử các kiểu khác ở `_thu/goi-y-cham.html`).
 
 Luôn có: nền hoa mờ cố định phía sau, đĩa nhạc ở góc dưới để tắt/bật nhạc (đĩa tự mờ và cho chạm xuyên khi nằm đè lên nút bấm).
 Màn mở thiệp: chạm chỗ nào cũng mở; điện thoại xoay ngang tự thu nhỏ cho vừa màn hình; hiện ngay từ đầu nên không thấy nội dung chớp qua.

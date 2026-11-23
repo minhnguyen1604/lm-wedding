@@ -6,7 +6,7 @@ Thứ tự trong album theo danh sách THU_TU bên dưới; ảnh nào không c�
 Sau khi chạy, cập nhật danh sách `gallery` trong config.js cho đủ số ảnh.
 
 Cách dùng (ở thư mục gốc repo):
-    python cong-cu/thu_nho_anh_cuoi.py                 # đọc nguon/anh-cuoi/
+    python cong-cu/thu_nho_anh_cuoi.py                 # đọc Thiep/
     python cong-cu/thu_nho_anh_cuoi.py thu-muc-anh-khac
 """
 import sys
@@ -15,32 +15,41 @@ from pathlib import Path
 from PIL import Image, ImageOps
 
 GOC = Path(__file__).resolve().parent.parent
-NGUON = Path(sys.argv[1]) if len(sys.argv) > 1 else GOC / "nguon" / "anh-cuoi-moi"
+NGUON = Path(sys.argv[1]) if len(sys.argv) > 1 else GOC / "Thiep"   # bộ 20 ảnh mới; bộ 15 ảnh trước ở nguon/anh-cuoi-moi
 DICH = GOC / "images" / "gallery"
 
-# Thứ tự album (15 ảnh): trộn đều ảnh đôi, ảnh cô dâu (studio hoa), ảnh chú rể và ảnh chi tiết,
-# mở đầu bằng ảnh hai người, ảnh chú rể một mình không đứng đầu và không đứng gần nhau.
-# Bộ ảnh cũ (6 ảnh) vẫn ở nguon/anh-cuoi/: chạy `python cong-cu/thu_nho_anh_cuoi.py nguon/anh-cuoi` để dùng lại.
+# Thứ tự album: 20 ảnh của bộ ảnh mới (2026-11-23), đúng thứ tự gia đình gửi.
+# Ảnh gốc (~20 MB/ảnh) nằm trong Thiep/ của thư mục thiepcuoi-online, không đưa lên GitHub; các repo khác chép
+# images/gallery/ sang là xong. Bộ ảnh trước ở nguon/anh-cuoi-moi/ và nguon/anh-cuoi/ (chạy kèm đường dẫn để dùng lại,
+# khi đó sửa THU_TU cho khớp tên file).
 THU_TU = [
-    "f68076b7-9090-4e75-90bc-5786d6c8029b.jpeg",   # hai người trước hàng cây
-    "9654e75e-500d-409b-8d83-f3ead175643c.jpeg",   # cô dâu, studio hoa
-    "8116c374-3c3c-4349-9a47-0edb87dbd576.jpeg",   # hai người dưới khăn voan dài
-    "02714804-a7da-4924-9c1a-f677e95d043c.jpeg",   # cô dâu nhìn nghiêng, studio hoa
-    "77a709b0-bad7-4aa1-96d6-35b0d1175740.jpeg",   # hai người dạo bước, quán ngoài trời
-    "da202839-0634-47b5-856e-720fcbca8782.jpeg",   # chú rể trên bãi cỏ
-    "c104407c-46ec-4900-b209-914e11ebca17.jpeg",   # cô dâu ngồi giữa hoa
-    "c9164f4300b280ecd9a3.jpg",                    # hai người dưới ô trong suốt (ảnh màu, thay ảnh đen trắng)
-    "261fb844-6c7a-46b3-98a7-39daedd5d534.jpeg",   # cận bó hoa
-    "5092bcec-c5a6-42cf-8a7f-12d1235d0fc6.jpeg",   # cô dâu quay lưng, studio hoa
-    "67a378c1-af4b-4da0-95bf-c162b4d80cb1.jpeg",   # hai người qua gương cầu
-    "0756d918-adc7-4abb-8e9c-fc3516e0d9c6.jpeg",   # chú rể cầm hoa
-    "f66a86a4-1a6d-4753-8b0e-3729e3d46042.jpeg",   # hai người trong quán, tường cam
-    "5ebd9def-c657-46c4-af99-11a668fc33bf.jpeg",   # cô dâu, toàn cảnh studio hoa
-    "999a021232e2b2bcebf3.jpg",                    # hai người nắm tay xoay điệu nhảy trên bãi cỏ (khép lại album)
+    "MAN_8554.jpg",
+    "MAN_9415.jpg",
+    "MAN_8367.jpg",
+    "MAN_9064.jpg",
+    "MAN_8452.jpg",
+    "MAN_9503.jpg",
+    "MAN_9420.jpg",
+    "MAN_9367.jpg",
+    "MAN_8349.jpg",
+    "MAN_8058.jpg",
+    "MAN_7044.jpg",
+    "MAN_8209.jpg",
+    "TAN_0301.jpg",
+    "TAN_0378.jpg",
+    "MAN_0139.jpg",
+    "MAN_0475.jpg",
+    "TAN_0901.jpg",
+    "MAN_9559.jpg",
+    "MAN_9604.jpg",
+    "MAN_9644.jpg",
 ]
 
 co_san = sorted(p.name for p in NGUON.iterdir() if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp"))
-ds = [t for t in THU_TU if t in co_san] + [t for t in co_san if t not in THU_TU]
+ds = [t for t in THU_TU if t in co_san]   # chỉ ảnh có trong danh sách (Thiep/ còn vài ảnh không dùng)
+thieu = [t for t in THU_TU if t not in co_san]
+if thieu:
+    sys.exit(f'Thiếu ảnh trong {NGUON}: {thieu}')
 DICH.mkdir(parents=True, exist_ok=True)
 for cu in list(DICH.glob("*.jpg")) + list(DICH.glob("nho/*.jpg")):   # thay toàn bộ album: xoá ảnh cũ trước
     cu.unlink()
